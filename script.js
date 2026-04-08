@@ -1,9 +1,12 @@
 /**
  * JUEGO DE VOCABULARIO TURCO-ESPAÑOL 
  * Kelime Lab 1.1A
+ * * Dinámica: Bloques de 25 palabras con sistema de maestría (5 puntos).
+ * Números: Generación aleatoria dinámica (0-99, 100, 1000, 1M).
+ * Persistencia: LocalStorage por modo de juego.
  */
 
-// 1. BASE DE DATOS DE PALABRAS (Copia fiel de tu lista)
+// 1. BASE DE DATOS DE PALABRAS
 const allWords = [
     {word:"aç",correct:"hambriento/a"},{word:"açık",correct:"abierto / claro (color)"},{word:"açmak",correct:"abrir"},
     {word:"ad (isim)",correct:"nombre"},{word:"adres",correct:"dirección"},{word:"Affedersiniz",correct:"Perdone"},
@@ -216,40 +219,54 @@ const MASTERY_THRESHOLD = 5;
 let score = 0;
 let progress = {};
 
-// 3. FUNCIONES DE INTERFAZ (IMPORTANTES)
+// 3. GENERADOR DE NÚMEROS ALEATORIOS
+function getRandomNumberWord() {
+    const units = ["", "bir", "iki", "üç", "dört", "beş", "alt", "yedi", "sekiz", "dokuz"];
+    const tens = ["", "on", "yirmi", "otuz", "kırk", "elli", "altmış", "yetmiş", "seksen", "doksan"];
+    const specials = [
+        { n: 100, tr: "yüz" },
+        { n: 1000, tr: "bin" },
+        { n: 1000000, tr: "bir milyon" }
+    ];
 
-// Esta función es la que llama el botón de Menú
+    if (Math.random() < 0.2) {
+        let s = specials[Math.floor(Math.random() * specials.length)];
+        return { word: s.tr, correct: s.n.toLocaleString() };
+    }
+
+    let n = Math.floor(Math.random() * 100);
+    if (n === 0) return { word: "sıfır", correct: "0" };
+    
+    let ten = Math.floor(n / 10);
+    let unit = n % 10;
+    let tr = (tens[ten] + " " + units[unit]).trim();
+    
+    return { word: tr, correct: n.toString() };
+}
+
+// 4. FUNCIONES DE INTERFAZ
 function showMenu() {
     document.getElementById('game-container').style.display = 'none';
     document.getElementById('start-screen').style.display = 'flex';
-    setMode(gameMode); // Refresca el estado de los botones
+    setMode(gameMode);
 }
 
 function setMode(mode, e) {
     gameMode = mode;
-    
     document.querySelectorAll('#mode-selector .primary-btn').forEach(btn => {
         btn.style.opacity = "0.5";
         btn.style.transform = "scale(0.95)";
         btn.style.border = "none";
     });
-    
-    // Si viene de un evento de click real
     if (e && e.currentTarget) {
         e.currentTarget.style.opacity = "1";
         e.currentTarget.style.transform = "scale(1)";
         e.currentTarget.style.border = "2px solid white";
     }
-
     score = parseInt(localStorage.getItem(`turco_score_${mode}`)) || 0;
     progress = JSON.parse(localStorage.getItem(`turco_progress_${mode}`)) || {};
-    
     const resumeBtn = document.getElementById('resume-button');
-    if (score > 0 || Object.keys(progress).length > 0) {
-        resumeBtn.style.display = 'block';
-    } else {
-        resumeBtn.style.display = 'none';
-    }
+    resumeBtn.style.display = (score > 0 || Object.keys(progress).length > 0) ? 'block' : 'none';
 }
 
 function resetAndStart() {
@@ -268,7 +285,7 @@ function startGame() {
     loadQuestion();
 }
 
-// 4. LÓGICA DE JUEGO
+// 5. LÓGICA DE JUEGO
 function initBlocks() {
     let available = allWords.filter(item => (progress[item.word] || 0) < MASTERY_THRESHOLD);
     available.sort(() => Math.random() - 0.5);
@@ -293,7 +310,10 @@ function loadQuestion() {
     }
 
     locked = false;
-    current = activeQueue[Math.floor(Math.random() * activeQueue.length)];
+    
+    // 10% de probabilidad de que aparezca un número aleatorio
+    let isNumber = Math.random() < 0.10;
+    current = isNumber ? getRandomNumberWord() : activeQueue[Math.floor(Math.random() * activeQueue.length)];
     
     if (gameMode === 'mixed') {
         currentRoundMode = Math.random() > 0.5 ? 'tr-es' : 'es-tr';
@@ -303,19 +323,21 @@ function loadQuestion() {
 
     const wordElement = document.getElementById("word");
     const optionsContainer = document.getElementById("options");
-    
-    let correctText;
-    if (currentRoundMode === 'tr-es') {
-        wordElement.textContent = current.word;
-        correctText = current.correct;
-    } else {
-        wordElement.textContent = current.correct;
-        correctText = current.word;
-    }
+    const dotsContainer = document.getElementById("dots");
+
+    let correctText = (currentRoundMode === 'tr-es') ? current.correct : current.word;
+    wordElement.textContent = (currentRoundMode === 'tr-es') ? current.word : current.correct;
 
     wordElement.classList.remove("word-mastered"); 
     optionsContainer.classList.remove("has-mastered");
-    renderDots(current.word);
+    
+    // Gestión de dots: ocultar si es número, mostrar si es palabra
+    if (isNumber) {
+        dotsContainer.style.visibility = "hidden";
+    } else {
+        dotsContainer.style.visibility = "visible";
+        renderDots(current.word);
+    }
 
     let opts = new Set([correctText]);
     while(opts.size < 4) {
@@ -329,16 +351,15 @@ function loadQuestion() {
         let btn = document.createElement("button");
         btn.className = "option";
         btn.textContent = opt;
-        btn.onclick = (e) => handleAnswer(opt, correctText, e.target);
+        btn.onclick = (e) => handleAnswer(opt, correctText, e.target, isNumber);
         optionsContainer.appendChild(btn);
     });
 }
 
-function handleAnswer(selected, correct, btn) {
+function handleAnswer(selected, correct, btn, isNumber) {
     if (locked) return;
     locked = true;
     
-    const wordKey = current.word;
     const optionsContainer = document.getElementById("options");
     let masteredThisTurn = false;
 
@@ -347,27 +368,33 @@ function handleAnswer(selected, correct, btn) {
     });
 
     if (selected === correct) {
-        progress[wordKey] = (progress[wordKey] || 0) + 1;
-        if (progress[wordKey] >= MASTERY_THRESHOLD) {
-            masteredThisTurn = true;
-            score++;
-            document.getElementById("word").classList.add("word-mastered");
-            optionsContainer.classList.add("has-mastered");
+        if (!isNumber) {
+            const wordKey = current.word;
+            progress[wordKey] = (progress[wordKey] || 0) + 1;
+            if (progress[wordKey] >= MASTERY_THRESHOLD) {
+                masteredThisTurn = true;
+                score++;
+                document.getElementById("word").classList.add("word-mastered");
+                optionsContainer.classList.add("has-mastered");
+            }
         }
-    } else {
+    } else if (!isNumber) {
         btn.classList.add("wrong");
+        const wordKey = current.word;
         if(progress[wordKey] > 0) progress[wordKey] -= 1;
+    } else {
+        btn.classList.add("wrong"); // Si falla número no resta puntos de maestría
     }
 
     localStorage.setItem(`turco_score_${gameMode}`, score);
     localStorage.setItem(`turco_progress_${gameMode}`, JSON.stringify(progress));
     
     updateUI();
-    renderDots(wordKey, masteredThisTurn);
+    if (!isNumber) renderDots(current.word, masteredThisTurn);
 
     setTimeout(() => {
         if (masteredThisTurn) {
-            activeQueue = activeQueue.filter(x => x.word !== wordKey);
+            activeQueue = activeQueue.filter(x => x.word !== current.word);
             if (pool.length > 0) activeQueue.push(pool.shift());
         }
         loadQuestion();
@@ -386,9 +413,7 @@ function renderDots(wordKey, mastered = false) {
     }
 }
 
-// 5. INICIALIZACIÓN
 window.onload = () => {
-    // Activa el primer botón de modo por defecto
     const firstBtn = document.querySelector('#mode-selector button');
     if(firstBtn) firstBtn.click();
 }
