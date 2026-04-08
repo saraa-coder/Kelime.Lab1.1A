@@ -39,7 +39,7 @@ const allWords = [
     {word:"dans",correct:"danza"},{word:"dar",correct:"estrecho/a"},{word:"defter",correct:"cuaderno"},
     {word:"değişik",correct:"diferente"},{word:"demek",correct:"decir"},{word:"deniz",correct:"mar"},
     {word:"dergi",correct:"revista"},{word:"ders",correct:"clase / lección"},{word:"dikkatli",correct:"cuidadoso/a"},
-    {word:"dikkatsiz",correct:"descuidado/a"},{word:"dinlemek",correct:"escuchar"},{word:"dinlenmek",correct:"descansar"},
+    {word:"dikkatsiz",correct:"descuidado/a"},{word:"dinlemek",correct:"escuchar"},{word:"dinlenmek",possible:"descansar"},
     {word:"dışarı",correct:"afuera"},{word:"dizi",correct:"serie"},{word:"doğum günü",correct:"cumpleaños"},
     {word:"doğum tarihi",correct:"fecha nacimiento"},{word:"dolap",correct:"armario"},{word:"dolaşmak",correct:"pasear"},
     {word:"dolu",correct:"lleno/a"},{word:"domates",correct:"tomate"},{word:"dönmek",correct:"volver"},
@@ -203,7 +203,7 @@ let pool = [];
 let activeQueue = []; 
 let current = null;
 let locked = false;
-let gameMode = 'tr-es'; // 'tr-es', 'es-tr', 'mixed'
+let gameMode = 'tr-es'; 
 let currentRoundMode = 'tr-es'; 
 
 const BLOCK_SIZE = 25; 
@@ -211,7 +211,7 @@ let score = 0;
 let progress = {};
 
 // FUNCIONES DE INTERFAZ DE INICIO
-function setMode(mode) {
+function setMode(mode, e) {
     gameMode = mode;
     
     // Resaltar visualmente el botón seleccionado
@@ -221,10 +221,12 @@ function setMode(mode) {
         btn.style.border = "none";
     });
     
-    const selectedBtn = event.currentTarget;
-    selectedBtn.style.opacity = "1";
-    selectedBtn.style.transform = "scale(1)";
-    selectedBtn.style.border = "2px solid white";
+    // Usamos el evento e para identificar el botón clickeado
+    if (e && e.currentTarget) {
+        e.currentTarget.style.opacity = "1";
+        e.currentTarget.style.transform = "scale(1)";
+        e.currentTarget.style.border = "2px solid white";
+    }
 
     // Cargar progreso guardado para este modo específico
     score = parseInt(localStorage.getItem(`turco_score_${mode}`)) || 0;
@@ -258,7 +260,6 @@ function startGame() {
 
 // LÓGICA DE APRENDIZAJE POR BLOQUES
 function initBlocks() {
-    // Filtramos palabras que aún no dominamos (menos de 5 aciertos)
     let available = allWords.filter(item => (progress[item.word] || 0) < 5);
     available.sort(() => Math.random() - 0.5);
     
@@ -283,7 +284,6 @@ function loadQuestion() {
     locked = false;
     current = activeQueue[Math.floor(Math.random() * activeQueue.length)];
     
-    // Lógica del modo KARISIİK (Mixto)
     if (gameMode === 'mixed') {
         currentRoundMode = Math.random() > 0.5 ? 'tr-es' : 'es-tr';
     } else {
@@ -306,7 +306,6 @@ function loadQuestion() {
     optionsContainer.classList.remove("has-mastered");
     renderDots(current.word);
 
-    // Generar 4 opciones
     let opts = new Set([correctText]);
     while(opts.size < 4) {
         let randomItem = allWords[Math.floor(Math.random() * allWords.length)];
@@ -332,7 +331,6 @@ function handleAnswer(selected, correct, btn) {
     const optionsContainer = document.getElementById("options");
     let masteredThisTurn = false;
 
-    // Mostrar respuesta correcta
     document.querySelectorAll(".option").forEach(b => {
         if (b.textContent === correct) b.classList.add("correct");
     });
@@ -347,11 +345,9 @@ function handleAnswer(selected, correct, btn) {
         }
     } else {
         btn.classList.add("wrong");
-        // Si falla, penalizamos un poco (opcional, aquí solo no sumamos)
         if(progress[wordKey] > 0) progress[wordKey] -= 1;
     }
 
-    // Guardar progreso
     localStorage.setItem(`turco_score_${gameMode}`, score);
     localStorage.setItem(`turco_progress_${gameMode}`, JSON.stringify(progress));
     
@@ -378,9 +374,8 @@ function renderDots(wordKey, mastered = false) {
     }
 }
 
-// Inicialización por defecto al cargar
+// Inicialización
 window.onload = () => {
-    // Simulamos click en el primer modo para inicializar
     const firstBtn = document.querySelector('#mode-selector button');
     if(firstBtn) firstBtn.click();
 }
