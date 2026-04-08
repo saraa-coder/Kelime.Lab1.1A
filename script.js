@@ -212,7 +212,7 @@ let gameMode = 'tr-es';
 let currentRoundMode = 'tr-es'; 
 
 const BLOCK_SIZE = 25; 
-const MASTERY_THRESHOLD = 5; // Puntos para eliminar palabra
+const MASTERY_THRESHOLD = 5;
 let score = 0;
 let progress = {};
 
@@ -243,6 +243,14 @@ function setMode(mode, e) {
     }
 }
 
+// NUEVA FUNCIÓN: Vuelve al menú de inicio
+function showMenu() {
+    document.getElementById('game-container').style.display = 'none';
+    document.getElementById('start-screen').style.display = 'flex';
+    // Refrescamos los botones de modo para mostrar si hay progreso
+    setMode(gameMode); 
+}
+
 function resetAndStart() {
     localStorage.removeItem(`turco_score_${gameMode}`);
     localStorage.removeItem(`turco_progress_${gameMode}`);
@@ -261,13 +269,9 @@ function startGame() {
 
 // 4. LÓGICA DE APRENDIZAJE POR BLOQUES
 function initBlocks() {
-    // Solo tomamos palabras que no han sido dominadas (menos de 5 puntos)
     let available = allWords.filter(item => (progress[item.word] || 0) < MASTERY_THRESHOLD);
-    
-    // Mezcla aleatoria inicial
     available.sort(() => Math.random() - 0.5);
     
-    // Dividimos en cola activa (las 25 actuales) y pool (el resto esperando)
     activeQueue = available.slice(0, BLOCK_SIZE);
     pool = available.slice(BLOCK_SIZE);
 }
@@ -280,15 +284,13 @@ function updateUI() {
 }
 
 function loadQuestion() {
-    // Si no quedan palabras en la cola ni en el pool
     if (activeQueue.length === 0 && pool.length === 0) {
         document.getElementById("word").textContent = "TEBRİKLER! 🎉";
-        document.getElementById("options").innerHTML = "<p>¡Has dominado todo el vocabulario!</p>";
+        document.getElementById("options").innerHTML = "";
         return;
     }
 
     locked = false;
-    // Seleccionamos una palabra al azar SOLO de las 25 activas
     current = activeQueue[Math.floor(Math.random() * activeQueue.length)];
     
     if (gameMode === 'mixed') {
@@ -313,7 +315,6 @@ function loadQuestion() {
     optionsContainer.classList.remove("has-mastered");
     renderDots(current.word);
 
-    // Generar opciones (1 correcta + 3 aleatorias de toda la base de datos)
     let opts = new Set([correctText]);
     while(opts.size < 4) {
         let randomItem = allWords[Math.floor(Math.random() * allWords.length)];
@@ -339,15 +340,12 @@ function handleAnswer(selected, correct, btn) {
     const optionsContainer = document.getElementById("options");
     let masteredThisTurn = false;
 
-    // Feedback visual de opciones
     document.querySelectorAll(".option").forEach(b => {
         if (b.textContent === correct) b.classList.add("correct");
     });
 
     if (selected === correct) {
         progress[wordKey] = (progress[wordKey] || 0) + 1;
-        
-        // ¿Ha llegado a la maestría?
         if (progress[wordKey] >= MASTERY_THRESHOLD) {
             masteredThisTurn = true;
             score++;
@@ -356,26 +354,19 @@ function handleAnswer(selected, correct, btn) {
         }
     } else {
         btn.classList.add("wrong");
-        // Penalización: bajamos un punto si falla (mínimo 0)
         if(progress[wordKey] > 0) progress[wordKey] -= 1;
     }
 
-    // Guardar progreso
     localStorage.setItem(`turco_score_${gameMode}`, score);
     localStorage.setItem(`turco_progress_${gameMode}`, JSON.stringify(progress));
     
     updateUI();
     renderDots(wordKey, masteredThisTurn);
 
-    // Tiempo de espera antes de la siguiente palabra
     setTimeout(() => {
         if (masteredThisTurn) {
-            // Eliminamos la palabra de la cola de 25
             activeQueue = activeQueue.filter(x => x.word !== wordKey);
-            // Si hay reserva en el pool, metemos la siguiente para mantener el bloque de 25
-            if (pool.length > 0) {
-                activeQueue.push(pool.shift());
-            }
+            if (pool.length > 0) activeQueue.push(pool.shift());
         }
         loadQuestion();
     }, masteredThisTurn ? 1200 : 700);
@@ -393,7 +384,6 @@ function renderDots(wordKey, mastered = false) {
     }
 }
 
-// 5. INICIO AL CARGAR
 window.onload = () => {
     const firstBtn = document.querySelector('#mode-selector button');
     if(firstBtn) firstBtn.click();
