@@ -39,7 +39,7 @@ const allWords = [
     {word:"dans",correct:"danza"},{word:"dar",correct:"estrecho/a"},{word:"defter",correct:"cuaderno"},
     {word:"değişik",correct:"diferente"},{word:"demek",correct:"decir"},{word:"deniz",correct:"mar"},
     {word:"dergi",correct:"revista"},{word:"ders",correct:"clase / lección"},{word:"dikkatli",correct:"cuidadoso/a"},
-    {word:"dikkatsiz",correct:"descuidado/a"},{word:"dinlemek",correct:"escuchar"},{word:"dinlenmek",possible:"descansar"},
+    {word:"dikkatsiz",correct:"descuidado/a"},{word:"dinlemek",correct:"escuchar"},{word:"dinlenmek",correct:"descansar"},
     {word:"dışarı",correct:"afuera"},{word:"dizi",correct:"serie"},{word:"doğum günü",correct:"cumpleaños"},
     {word:"doğum tarihi",correct:"fecha nacimiento"},{word:"dolap",correct:"armario"},{word:"dolaşmak",correct:"pasear"},
     {word:"dolu",correct:"lleno/a"},{word:"domates",correct:"tomate"},{word:"dönmek",correct:"volver"},
@@ -221,7 +221,6 @@ function setMode(mode, e) {
         btn.style.border = "none";
     });
     
-    // Usamos el evento e para identificar el botón clickeado
     if (e && e.currentTarget) {
         e.currentTarget.style.opacity = "1";
         e.currentTarget.style.transform = "scale(1)";
@@ -240,14 +239,13 @@ function setMode(mode, e) {
     }
 }
 
+// MODIFICADO: Ya no pide confirmación al pulsar Nuevo Juego
 function resetAndStart() {
-    if(confirm("¿Seguro? Se borrará el progreso de este modo.")) {
-        localStorage.removeItem(`turco_score_${gameMode}`);
-        localStorage.removeItem(`turco_progress_${gameMode}`);
-        score = 0;
-        progress = {};
-        startGame();
-    }
+    localStorage.removeItem(`turco_score_${gameMode}`);
+    localStorage.removeItem(`turco_progress_${gameMode}`);
+    score = 0;
+    progress = {};
+    startGame();
 }
 
 function startGame() {
@@ -276,7 +274,7 @@ function updateUI() {
 
 function loadQuestion() {
     if (activeQueue.length === 0 && pool.length === 0) {
-        document.getElementById("word").textContent = "TEBRİKLER! (¡Completado!)";
+        document.getElementById("word").textContent = "TEBRİKLER!";
         document.getElementById("options").innerHTML = "";
         return;
     }
@@ -374,7 +372,6 @@ function renderDots(wordKey, mastered = false) {
     }
 }
 
-// Inicialización
 window.onload = () => {
     const firstBtn = document.querySelector('#mode-selector button');
     if(firstBtn) firstBtn.click();
