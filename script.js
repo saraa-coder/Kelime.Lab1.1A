@@ -412,10 +412,6 @@ function renderDots(wordKey, mastered = false) {
 }
 
 window.onload = () => {
-    // Aseguramos que el inicio esté visible y el juego oculto por defecto
-    document.getElementById('game-container').style.display = 'none';
-    document.getElementById('start-screen').style.display = 'flex';
-
     const firstBtn = document.querySelector('#mode-selector button');
     if(firstBtn) firstBtn.click();
 }
