@@ -197,7 +197,7 @@ const allWords = [
     {word:"çiftçi",correct:"agricultor/a"},{word:"işletmeci",correct:"empresario/a"},{word:"satış temsilcisi",correct:"vendedor/a"},
     {word:"bilim insanı",correct:"científico/a"},{word:"cep telefonu",correct:"teléfono móvil"},{word:"cüzdan",correct:"cartera"},
     {word:"Kurşun kalem",correct:"lápiz"},{word:"uzaktan kumanda",correct:"control remoto, mando"},
-    {word:"diş fırçası",correct:"cepillo de dientes"},{word:"kredi kartı",correct:"tarjeta de crédito"},
+    {word:"diş fırçası",correct:"cepillo de dientes"},{word:"kredi cardı",correct:"tarjeta de crédito"},
     {word:"güneş gözlüğü",correct:"gafas de sol"},{word:"telefon şarjı",correct:"cargador del teléfono"},
     {word:"fincan",correct:"taza"},{word:"kupa",correct:"taza / trofeo"},{word:"alışveriş çantası",correct:"bolsa de la compra"},
     {word:"bıçak",correct:"cuchillo"},{word:"su şişesi",correct:"botella de agua"}
@@ -243,11 +243,15 @@ function setMode(mode, e) {
     }
 }
 
-// NUEVA FUNCIÓN: Vuelve al menú de inicio
+/**
+ * REVISIÓN: Esta función ahora redirige ÚNICAMENTE a la página principal.
+ * Simplemente oculta el contenedor del juego y muestra la pantalla de inicio.
+ */
 function showMenu() {
     document.getElementById('game-container').style.display = 'none';
     document.getElementById('start-screen').style.display = 'flex';
-    // Refrescamos los botones de modo para mostrar si hay progreso
+    
+    // Opcional: Refrescamos el estado del modo actual
     setMode(gameMode); 
 }
 
@@ -279,8 +283,11 @@ function initBlocks() {
 function updateUI() {
     let total = allWords.length;
     let percent = Math.round((score / total) * 100);
-    document.getElementById("score").textContent = score + " tamamlanan";
-    document.getElementById("percent").textContent = "%" + percent;
+    const scoreLabel = document.getElementById("score");
+    const percentLabel = document.getElementById("percent");
+    
+    if(scoreLabel) scoreLabel.textContent = score + " tamamlanan";
+    if(percentLabel) percentLabel.textContent = "%" + percent;
 }
 
 function loadQuestion() {
@@ -385,6 +392,7 @@ function renderDots(wordKey, mastered = false) {
 }
 
 window.onload = () => {
+    // Al cargar la página, activamos el primer modo por defecto
     const firstBtn = document.querySelector('#mode-selector button');
     if(firstBtn) firstBtn.click();
 }
