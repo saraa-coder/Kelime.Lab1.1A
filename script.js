@@ -1,4 +1,9 @@
-// BASE DE DATOS DE PALABRAS
+/**
+ * JUEGO DE VOCABULARIO TURCO-ESPAÑOL
+ * Dinámica: Bloques de 25 palabras con sistema de maestría (5 puntos).
+ */
+
+// 1. BASE DE DATOS DE PALABRAS
 const allWords = [
     {word:"aç",correct:"hambriento/a"},{word:"açık",correct:"abierto / claro (color)"},{word:"açmak",correct:"abrir"},
     {word:"ad (isim)",correct:"nombre"},{word:"adres",correct:"dirección"},{word:"Affedersiniz",correct:"Perdone"},
@@ -198,7 +203,7 @@ const allWords = [
     {word:"bıçak",correct:"cuchillo"},{word:"su şişesi",correct:"botella de agua"}
 ];
 
-// VARIABLES DE ESTADO
+// 2. VARIABLES DE ESTADO
 let pool = []; 
 let activeQueue = []; 
 let current = null;
@@ -207,14 +212,14 @@ let gameMode = 'tr-es';
 let currentRoundMode = 'tr-es'; 
 
 const BLOCK_SIZE = 25; 
+const MASTERY_THRESHOLD = 5; // Puntos para eliminar palabra
 let score = 0;
 let progress = {};
 
-// FUNCIONES DE INTERFAZ DE INICIO
+// 3. FUNCIONES DE INTERFAZ
 function setMode(mode, e) {
     gameMode = mode;
     
-    // Resaltar visualmente el botón seleccionado
     document.querySelectorAll('#mode-selector .primary-btn').forEach(btn => {
         btn.style.opacity = "0.5";
         btn.style.transform = "scale(0.95)";
@@ -227,7 +232,6 @@ function setMode(mode, e) {
         e.currentTarget.style.border = "2px solid white";
     }
 
-    // Cargar progreso guardado para este modo específico
     score = parseInt(localStorage.getItem(`turco_score_${mode}`)) || 0;
     progress = JSON.parse(localStorage.getItem(`turco_progress_${mode}`)) || {};
     
@@ -239,7 +243,6 @@ function setMode(mode, e) {
     }
 }
 
-// MODIFICADO: Ya no pide confirmación al pulsar Nuevo Juego
 function resetAndStart() {
     localStorage.removeItem(`turco_score_${gameMode}`);
     localStorage.removeItem(`turco_progress_${gameMode}`);
@@ -256,11 +259,15 @@ function startGame() {
     loadQuestion();
 }
 
-// LÓGICA DE APRENDIZAJE POR BLOQUES
+// 4. LÓGICA DE APRENDIZAJE POR BLOQUES
 function initBlocks() {
-    let available = allWords.filter(item => (progress[item.word] || 0) < 5);
+    // Solo tomamos palabras que no han sido dominadas (menos de 5 puntos)
+    let available = allWords.filter(item => (progress[item.word] || 0) < MASTERY_THRESHOLD);
+    
+    // Mezcla aleatoria inicial
     available.sort(() => Math.random() - 0.5);
     
+    // Dividimos en cola activa (las 25 actuales) y pool (el resto esperando)
     activeQueue = available.slice(0, BLOCK_SIZE);
     pool = available.slice(BLOCK_SIZE);
 }
@@ -273,13 +280,15 @@ function updateUI() {
 }
 
 function loadQuestion() {
+    // Si no quedan palabras en la cola ni en el pool
     if (activeQueue.length === 0 && pool.length === 0) {
-        document.getElementById("word").textContent = "TEBRİKLER!";
-        document.getElementById("options").innerHTML = "";
+        document.getElementById("word").textContent = "TEBRİKLER! 🎉";
+        document.getElementById("options").innerHTML = "<p>¡Has dominado todo el vocabulario!</p>";
         return;
     }
 
     locked = false;
+    // Seleccionamos una palabra al azar SOLO de las 25 activas
     current = activeQueue[Math.floor(Math.random() * activeQueue.length)];
     
     if (gameMode === 'mixed') {
@@ -304,6 +313,7 @@ function loadQuestion() {
     optionsContainer.classList.remove("has-mastered");
     renderDots(current.word);
 
+    // Generar opciones (1 correcta + 3 aleatorias de toda la base de datos)
     let opts = new Set([correctText]);
     while(opts.size < 4) {
         let randomItem = allWords[Math.floor(Math.random() * allWords.length)];
@@ -329,13 +339,16 @@ function handleAnswer(selected, correct, btn) {
     const optionsContainer = document.getElementById("options");
     let masteredThisTurn = false;
 
+    // Feedback visual de opciones
     document.querySelectorAll(".option").forEach(b => {
         if (b.textContent === correct) b.classList.add("correct");
     });
 
     if (selected === correct) {
         progress[wordKey] = (progress[wordKey] || 0) + 1;
-        if (progress[wordKey] === 5) {
+        
+        // ¿Ha llegado a la maestría?
+        if (progress[wordKey] >= MASTERY_THRESHOLD) {
             masteredThisTurn = true;
             score++;
             document.getElementById("word").classList.add("word-mastered");
@@ -343,19 +356,26 @@ function handleAnswer(selected, correct, btn) {
         }
     } else {
         btn.classList.add("wrong");
+        // Penalización: bajamos un punto si falla (mínimo 0)
         if(progress[wordKey] > 0) progress[wordKey] -= 1;
     }
 
+    // Guardar progreso
     localStorage.setItem(`turco_score_${gameMode}`, score);
     localStorage.setItem(`turco_progress_${gameMode}`, JSON.stringify(progress));
     
     updateUI();
     renderDots(wordKey, masteredThisTurn);
 
+    // Tiempo de espera antes de la siguiente palabra
     setTimeout(() => {
         if (masteredThisTurn) {
+            // Eliminamos la palabra de la cola de 25
             activeQueue = activeQueue.filter(x => x.word !== wordKey);
-            if (pool.length > 0) activeQueue.push(pool.shift());
+            // Si hay reserva en el pool, metemos la siguiente para mantener el bloque de 25
+            if (pool.length > 0) {
+                activeQueue.push(pool.shift());
+            }
         }
         loadQuestion();
     }, masteredThisTurn ? 1200 : 700);
@@ -363,15 +383,17 @@ function handleAnswer(selected, correct, btn) {
 
 function renderDots(wordKey, mastered = false) {
     let container = document.getElementById("dots");
+    if (!container) return;
     container.innerHTML = "";
     let val = progress[wordKey] || 0;
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < MASTERY_THRESHOLD; i++) {
         let d = document.createElement("div");
         d.className = "dot" + (i < val ? " active" : "") + (mastered ? " mastered" : "");
         container.appendChild(d);
     }
 }
 
+// 5. INICIO AL CARGAR
 window.onload = () => {
     const firstBtn = document.querySelector('#mode-selector button');
     if(firstBtn) firstBtn.click();
