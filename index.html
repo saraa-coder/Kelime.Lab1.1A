@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kelime Lab 1.1A</title>
-    
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -13,16 +12,16 @@
         <h1>Kelime Lab 1.1A</h1>
         
         <div id="mode-selector">
-            <button onclick="setMode('tr-es')" class="primary-btn" style="background-color: #10b981;">
+            <button onclick="setMode('tr-es', event)" class="primary-btn" style="background-color: #10b981;">
                 Turco ➔ Español
             </button>
             
-            <button onclick="setMode('es-tr')" class="primary-btn" style="background-color: #f59e0b;">
+            <button onclick="setMode('es-tr', event)" class="primary-btn" style="background-color: #f59e0b;">
                 Español ➔ Turco
             </button>
             
-            <button onclick="setMode('mixed')" class="primary-btn" style="background-color: #ec4899;">
-                Karışık
+            <button onclick="setMode('mixed', event)" class="primary-btn" style="background-color: #ec4899;">
+                Karışık (Mixto)
             </button>
         </div>
 
@@ -30,16 +29,16 @@
 
         <div id="action-buttons">
             <button id="start-button" onclick="resetAndStart()" class="primary-btn" style="background-color: #3949ab;">
-                YENİ OYUN
+                YENİ OYUN (Nuevo Juego)
             </button>
             
             <button id="resume-button" onclick="startGame()" class="primary-btn" style="display: none; background-color: #5c6bc0;">
-                DEVAM ET
+                DEVAM ET (Continuar)
             </button>
         </div>
     </div>
 
-    <div id="game-container">
+    <div id="game-container" style="display: none;">
         <div class="stats-bar">
             <span id="score">0 tamamlanan</span>
             <span id="percent">%0</span>
@@ -49,8 +48,7 @@
 
         <div id="word">Cargando...</div>
 
-        <div id="options">
-            </div>
+        <div id="options"></div>
     </div>
 
     <script src="script.js"></script>
