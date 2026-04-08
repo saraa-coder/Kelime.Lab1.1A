@@ -15,11 +15,9 @@
             <button onclick="setMode('tr-es', event)" class="primary-btn" style="background-color: #10b981;">
                 Türkçe ➔ Español
             </button>
-            
             <button onclick="setMode('es-tr', event)" class="primary-btn" style="background-color: #f59e0b;">
                 Español ➔ Türkçe
             </button>
-            
             <button onclick="setMode('mixed', event)" class="primary-btn" style="background-color: #ec4899;">
                 Karışık
             </button>
@@ -31,7 +29,6 @@
             <button id="start-button" onclick="resetAndStart()" class="primary-btn" style="background-color: #3949ab;">
                 YENİ OYUN
             </button>
-            
             <button id="resume-button" onclick="startGame()" class="primary-btn" style="display: none; background-color: #5c6bc0;">
                 DEVAM ET
             </button>
@@ -40,7 +37,7 @@
 
     <div id="game-container" style="display: none;">
         <div class="stats-bar">
-            <button onclick="volverAlInicio()" class="menu-btn">MENÜ</button>
+            <button onclick="showMenu()" class="menu-btn">MENÜ</button>
             
             <div class="stats-info">
                 <span id="score">0 tamamlanan</span>
