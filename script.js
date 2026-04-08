@@ -1,7 +1,7 @@
 /**
  * JUEGO DE VOCABULARIO TURCO-ESPAÑOL 
  * Kelime Lab 1.1A
- * * Dinámica: Bloques de 25 palabras con sistema de maestría (5 puntos).
+ * Dinámica: Bloques de 25 palabras con sistema de maestría (5 puntos).
  * Números: Generación aleatoria dinámica (0-99, 100, 1000, 1M).
  * Persistencia: LocalStorage por modo de juego.
  */
@@ -311,7 +311,6 @@ function loadQuestion() {
 
     locked = false;
     
-    // 10% de probabilidad de que aparezca un número aleatorio
     let isNumber = Math.random() < 0.10;
     current = isNumber ? getRandomNumberWord() : activeQueue[Math.floor(Math.random() * activeQueue.length)];
     
@@ -331,7 +330,6 @@ function loadQuestion() {
     wordElement.classList.remove("word-mastered"); 
     optionsContainer.classList.remove("has-mastered");
     
-    // Gestión de dots: ocultar si es número, mostrar si es palabra
     if (isNumber) {
         dotsContainer.style.visibility = "hidden";
     } else {
@@ -383,7 +381,7 @@ function handleAnswer(selected, correct, btn, isNumber) {
         const wordKey = current.word;
         if(progress[wordKey] > 0) progress[wordKey] -= 1;
     } else {
-        btn.classList.add("wrong"); // Si falla número no resta puntos de maestría
+        btn.classList.add("wrong"); 
     }
 
     localStorage.setItem(`turco_score_${gameMode}`, score);
@@ -414,6 +412,10 @@ function renderDots(wordKey, mastered = false) {
 }
 
 window.onload = () => {
+    // Aseguramos que el inicio esté visible y el juego oculto por defecto
+    document.getElementById('game-container').style.display = 'none';
+    document.getElementById('start-screen').style.display = 'flex';
+
     const firstBtn = document.querySelector('#mode-selector button');
     if(firstBtn) firstBtn.click();
 }
