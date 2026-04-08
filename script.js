@@ -1,9 +1,9 @@
 /**
- * JUEGO DE VOCABULARIO TURCO-ESPAÑOL
- * Dinámica: Bloques de 25 palabras con sistema de maestría (5 puntos).
+ * JUEGO DE VOCABULARIO TURCO-ESPAÑOL 
+ * Kelime Lab 1.1A
  */
 
-// 1. BASE DE DATOS DE PALABRAS
+// 1. BASE DE DATOS DE PALABRAS (Copia fiel de tu lista)
 const allWords = [
     {word:"aç",correct:"hambriento/a"},{word:"açık",correct:"abierto / claro (color)"},{word:"açmak",correct:"abrir"},
     {word:"ad (isim)",correct:"nombre"},{word:"adres",correct:"dirección"},{word:"Affedersiniz",correct:"Perdone"},
@@ -197,7 +197,7 @@ const allWords = [
     {word:"çiftçi",correct:"agricultor/a"},{word:"işletmeci",correct:"empresario/a"},{word:"satış temsilcisi",correct:"vendedor/a"},
     {word:"bilim insanı",correct:"científico/a"},{word:"cep telefonu",correct:"teléfono móvil"},{word:"cüzdan",correct:"cartera"},
     {word:"Kurşun kalem",correct:"lápiz"},{word:"uzaktan kumanda",correct:"control remoto, mando"},
-    {word:"diş fırçası",correct:"cepillo de dientes"},{word:"kredi cardı",correct:"tarjeta de crédito"},
+    {word:"diş fırçası",correct:"cepillo de dientes"},{word:"kredi kartı",correct:"tarjeta de crédito"},
     {word:"güneş gözlüğü",correct:"gafas de sol"},{word:"telefon şarjı",correct:"cargador del teléfono"},
     {word:"fincan",correct:"taza"},{word:"kupa",correct:"taza / trofeo"},{word:"alışveriş çantası",correct:"bolsa de la compra"},
     {word:"bıçak",correct:"cuchillo"},{word:"su şişesi",correct:"botella de agua"}
@@ -216,7 +216,15 @@ const MASTERY_THRESHOLD = 5;
 let score = 0;
 let progress = {};
 
-// 3. FUNCIONES DE INTERFAZ
+// 3. FUNCIONES DE INTERFAZ (IMPORTANTES)
+
+// Esta función es la que llama el botón de Menú
+function showMenu() {
+    document.getElementById('game-container').style.display = 'none';
+    document.getElementById('start-screen').style.display = 'flex';
+    setMode(gameMode); // Refresca el estado de los botones
+}
+
 function setMode(mode, e) {
     gameMode = mode;
     
@@ -226,6 +234,7 @@ function setMode(mode, e) {
         btn.style.border = "none";
     });
     
+    // Si viene de un evento de click real
     if (e && e.currentTarget) {
         e.currentTarget.style.opacity = "1";
         e.currentTarget.style.transform = "scale(1)";
@@ -241,18 +250,6 @@ function setMode(mode, e) {
     } else {
         resumeBtn.style.display = 'none';
     }
-}
-
-/**
- * REVISIÓN: Esta función ahora redirige ÚNICAMENTE a la página principal.
- * Simplemente oculta el contenedor del juego y muestra la pantalla de inicio.
- */
-function showMenu() {
-    document.getElementById('game-container').style.display = 'none';
-    document.getElementById('start-screen').style.display = 'flex';
-    
-    // Opcional: Refrescamos el estado del modo actual
-    setMode(gameMode); 
 }
 
 function resetAndStart() {
@@ -271,11 +268,10 @@ function startGame() {
     loadQuestion();
 }
 
-// 4. LÓGICA DE APRENDIZAJE POR BLOQUES
+// 4. LÓGICA DE JUEGO
 function initBlocks() {
     let available = allWords.filter(item => (progress[item.word] || 0) < MASTERY_THRESHOLD);
     available.sort(() => Math.random() - 0.5);
-    
     activeQueue = available.slice(0, BLOCK_SIZE);
     pool = available.slice(BLOCK_SIZE);
 }
@@ -283,11 +279,10 @@ function initBlocks() {
 function updateUI() {
     let total = allWords.length;
     let percent = Math.round((score / total) * 100);
-    const scoreLabel = document.getElementById("score");
-    const percentLabel = document.getElementById("percent");
-    
-    if(scoreLabel) scoreLabel.textContent = score + " tamamlanan";
-    if(percentLabel) percentLabel.textContent = "%" + percent;
+    const scoreEl = document.getElementById("score");
+    const percentEl = document.getElementById("percent");
+    if(scoreEl) scoreEl.textContent = score + " tamamlanan";
+    if(percentEl) percentEl.textContent = "%" + percent;
 }
 
 function loadQuestion() {
@@ -391,8 +386,9 @@ function renderDots(wordKey, mastered = false) {
     }
 }
 
+// 5. INICIALIZACIÓN
 window.onload = () => {
-    // Al cargar la página, activamos el primer modo por defecto
+    // Activa el primer botón de modo por defecto
     const firstBtn = document.querySelector('#mode-selector button');
     if(firstBtn) firstBtn.click();
 }
