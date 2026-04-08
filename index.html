@@ -3,75 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kelime Lab 1.1A</title>
+    <title>Turco Master - Karışık</title>
     
     <link rel="stylesheet" href="style.css">
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
 </head>
 <body>
 
     <div id="start-screen">
-        <header>
-            <h1>Kelime Lab <span class="version">1.1A</span></h1>
-            <p class="subtitle">Laboratorio de Vocabulario</p>
-        </header>
+        <h1>TURCO MASTER</h1>
         
         <div id="mode-selector">
-            <span class="mode-label">SELECCIONA MODO DE ESTUDIO:</span>
+            <span class="mode-label">SELECCIONA MODO:</span>
             
-            <button onclick="setMode('tr-es')" class="primary-btn btn-tr-es">
+            <button onclick="setMode('tr-es')" class="primary-btn" style="background-color: #10b981;">
                 Turco ➔ Español
             </button>
             
-            <button onclick="setMode('es-tr')" class="primary-btn btn-es-tr">
+            <button onclick="setMode('es-tr')" class="primary-btn" style="background-color: #f59e0b;">
                 Español ➔ Turco
             </button>
             
-            <button onclick="setMode('mixed')" class="primary-btn btn-karisik">
+            <button onclick="setMode('mixed')" class="primary-btn" style="background-color: #ec4899;">
                 Karışık
             </button>
         </div>
 
-        <div class="divider"></div>
+        <hr style="margin: 25px 0; border: 0; border-top: 1px solid rgba(255,255,255,0.1);">
 
         <div id="action-buttons">
-            <button id="start-button" onclick="resetAndStart()" class="primary-btn btn-new">
+            <button id="start-button" onclick="resetAndStart()" class="primary-btn" style="background-color: #3949ab;">
                 NUEVA PARTIDA
             </button>
             
-            <button id="resume-button" onclick="startGame()" class="primary-btn btn-resume" style="display: none;">
+            <button id="resume-button" onclick="startGame()" class="primary-btn" style="display: none; background-color: #5c6bc0;">
                 CONTINUAR
             </button>
         </div>
     </div>
 
-    <div id="game-container" style="display: none;">
+    <div id="game-container">
         <div class="stats-bar">
-            <div class="stat-item">
-                <span class="stat-label">Progreso</span>
-                <span id="percent">%0</span>
-            </div>
-            <div class="stat-item">
-                <span class="stat-label">Completadas</span>
-                <span id="score">0</span>
-            </div>
+            <span id="score">0 tamamlanan</span>
+            <span id="percent">%0</span>
         </div>
 
-        <div id="dots-container">
-            <div id="dots"></div>
-        </div>
+        <div id="dots"></div>
 
-        <main id="question-area">
-            <div id="word">Cargando...</div>
-        </main>
+        <div id="word">Cargando...</div>
 
-        <div id="options" class="options-grid">
+        <div id="options">
             </div>
-
-        <button onclick="location.reload()" class="back-link">Volver al Menú</button>
     </div>
 
     <script src="script.js"></script>
