@@ -218,7 +218,7 @@ let progress = {};
 
 // 3. GENERADOR DE NÚMEROS
 function getRandomNumberWord() {
-    const units = ["", "bir", "iki", "üç", "dört", "beş", "alt", "yedi", "sekiz", "dokuz"];
+    const units = ["", "bir", "iki", "üç", "dört", "beş", "altı", "yedi", "sekiz", "dokuz"];
     const tens = ["", "on", "yirmi", "otuz", "kırk", "elli", "altmış", "yetmiş", "seksen", "doksan"];
     const specials = [{ n: 100, tr: "yüz" }, { n: 1000, tr: "bin" }, { n: 1000000, tr: "bir milyon" }];
     if (Math.random() < 0.2) {
