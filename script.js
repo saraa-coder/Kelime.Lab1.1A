@@ -3,7 +3,7 @@
  * Kelime Lab 1.1A
  */
 
-// 1. BASE DE DATOS DE PALABRAS (Se mantiene igual)
+// 1. BASE DE DATOS DE PALABRAS
 const allWords = [
     {word:"aç",correct:"hambriento/a"},{word:"açık",correct:"abierto / claro (color)"},{word:"açmak",correct:"abrir"},
     {word:"ad (isim)",correct:"nombre"},{word:"adres",correct:"dirección"},{word:"Affedersiniz",correct:"Perdone"},
@@ -203,7 +203,7 @@ const allWords = [
     {word:"bıçak",correct:"cuchillo"},{word:"su şişesi",correct:"botella de agua"}
 ];
 
-// 2. VARIABLES DE ESTADO (Se mantienen igual)
+// 2. VARIABLES DE ESTADO
 let pool = []; 
 let activeQueue = []; 
 let current = null;
@@ -216,7 +216,7 @@ const MASTERY_THRESHOLD = 5;
 let score = 0;
 let progress = {};
 
-// 3. GENERADOR DE NÚMEROS (Se mantiene igual)
+// 3. GENERADOR DE NÚMEROS
 function getRandomNumberWord() {
     const units = ["", "bir", "iki", "üç", "dört", "beş", "alt", "yedi", "sekiz", "dokuz"];
     const tens = ["", "on", "yirmi", "otuz", "kırk", "elli", "altmış", "yetmiş", "seksen", "doksan"];
@@ -233,7 +233,7 @@ function getRandomNumberWord() {
     return { word: tr, correct: n.toString() };
 }
 
-// 4. FUNCIONES DE INTERFAZ (CORREGIDAS)
+// 4. FUNCIONES DE INTERFAZ
 function showMenu() {
     // Solo alternamos visibilidad sin resetear los estilos de los botones de modo
     document.getElementById('game-container').style.display = 'none';
@@ -250,7 +250,7 @@ function setMode(mode, e) {
         btn.style.border = "none";
     });
 
-    // Resaltar el botón seleccionado (si viene de un clic)
+    // Resaltar el botón seleccionado (si viene de un evento real)
     if (e && e.currentTarget) {
         e.currentTarget.style.opacity = "1";
         e.currentTarget.style.transform = "scale(1)";
@@ -263,7 +263,9 @@ function setMode(mode, e) {
     
     // Mostrar/Ocultar botón de continuar
     const resumeBtn = document.getElementById('resume-button');
-    resumeBtn.style.display = (score > 0 || Object.keys(progress).length > 0) ? 'block' : 'none';
+    if (resumeBtn) {
+        resumeBtn.style.display = (score > 0 || Object.keys(progress).length > 0) ? 'block' : 'none';
+    }
 }
 
 function resetAndStart() {
@@ -282,7 +284,7 @@ function startGame() {
     loadQuestion();
 }
 
-// 5. LÓGICA DE JUEGO (Se mantiene igual)
+// 5. LÓGICA DE JUEGO
 function initBlocks() {
     let available = allWords.filter(item => (progress[item.word] || 0) < MASTERY_THRESHOLD);
     available.sort(() => Math.random() - 0.5);
@@ -308,21 +310,37 @@ function loadQuestion() {
     locked = false;
     let isNumber = Math.random() < 0.10;
     current = isNumber ? getRandomNumberWord() : activeQueue[Math.floor(Math.random() * activeQueue.length)];
-    if (gameMode === 'mixed') { currentRoundMode = Math.random() > 0.5 ? 'tr-es' : 'es-tr'; } else { currentRoundMode = gameMode; }
+    
+    if (gameMode === 'mixed') { 
+        currentRoundMode = Math.random() > 0.5 ? 'tr-es' : 'es-tr'; 
+    } else { 
+        currentRoundMode = gameMode; 
+    }
+
     const wordElement = document.getElementById("word");
     const optionsContainer = document.getElementById("options");
     const dotsContainer = document.getElementById("dots");
+
     let correctText = (currentRoundMode === 'tr-es') ? current.correct : current.word;
     wordElement.textContent = (currentRoundMode === 'tr-es') ? current.word : current.correct;
+    
     wordElement.classList.remove("word-mastered"); 
     optionsContainer.classList.remove("has-mastered");
-    if (isNumber) { dotsContainer.style.visibility = "hidden"; } else { dotsContainer.style.visibility = "visible"; renderDots(current.word); }
+
+    if (isNumber) { 
+        dotsContainer.style.visibility = "hidden"; 
+    } else { 
+        dotsContainer.style.visibility = "visible"; 
+        renderDots(current.word); 
+    }
+
     let opts = new Set([correctText]);
     while(opts.size < 4) {
         let randomItem = allWords[Math.floor(Math.random() * allWords.length)];
         let randomOpt = (currentRoundMode === 'tr-es') ? randomItem.correct : randomItem.word;
         opts.add(randomOpt);
     }
+
     optionsContainer.innerHTML = "";
     [...opts].sort(() => Math.random() - 0.5).forEach(opt => {
         let btn = document.createElement("button");
@@ -338,7 +356,11 @@ function handleAnswer(selected, correct, btn, isNumber) {
     locked = true;
     const optionsContainer = document.getElementById("options");
     let masteredThisTurn = false;
-    document.querySelectorAll(".option").forEach(b => { if (b.textContent === correct) b.classList.add("correct"); });
+
+    document.querySelectorAll(".option").forEach(b => { 
+        if (b.textContent === correct) b.classList.add("correct"); 
+    });
+
     if (selected === correct) {
         if (!isNumber) {
             const wordKey = current.word;
@@ -350,15 +372,20 @@ function handleAnswer(selected, correct, btn, isNumber) {
                 optionsContainer.classList.add("has-mastered");
             }
         }
-    } else if (!isNumber) {
+    } else {
         btn.classList.add("wrong");
-        const wordKey = current.word;
-        if(progress[wordKey] > 0) progress[wordKey] -= 1;
-    } else { btn.classList.add("wrong"); }
+        if (!isNumber) {
+            const wordKey = current.word;
+            if(progress[wordKey] > 0) progress[wordKey] -= 1;
+        }
+    }
+
     localStorage.setItem(`turco_score_${gameMode}`, score);
     localStorage.setItem(`turco_progress_${gameMode}`, JSON.stringify(progress));
     updateUI();
+
     if (!isNumber) renderDots(current.word, masteredThisTurn);
+
     setTimeout(() => {
         if (masteredThisTurn) {
             activeQueue = activeQueue.filter(x => x.word !== current.word);
@@ -380,7 +407,7 @@ function renderDots(wordKey, mastered = false) {
     }
 }
 
-// Inicialización: Simula el clic en el primer botón para que tenga el estilo "seleccionado"
+// Inicialización corregida para que el menú principal sea consistente
 window.onload = () => {
     const firstBtn = document.querySelector('#mode-selector button');
     if(firstBtn) {
