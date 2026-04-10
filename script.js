@@ -1,10 +1,32 @@
 /**
  * JUEGO DE VOCABULARIO TURCO-ESPAÑOL
  * Dinámica: Bloques de 25 palabras con sistema de maestría (5 puntos).
+ * Incluye generación automática de números del 1 al 100 y 1000.
  */
 
-// 1. BASE DE DATOS DE PALABRAS
+// --- 1. GENERADOR AUTOMÁTICO DE NÚMEROS ---
+const numbersTR = {
+    units: ["", "bir", "iki", "üç", "dört", "beş", "altı", "yedi", "sekiz", "dokuz"],
+    tens: ["", "on", "yirmi", "otuz", "kırk", "elli", "altmış", "yetmiş", "seksen", "doksan"]
+};
+
+const generatedNumbers = [];
+
+// Generar del 1 al 99
+for (let i = 1; i <= 99; i++) {
+    let ten = Math.floor(i / 10);
+    let unit = i % 10;
+    let name = (numbersTR.tens[ten] + (unit > 0 ? " " + numbersTR.units[unit] : "")).trim();
+    generatedNumbers.push({ word: name, correct: i.toString() });
+}
+
+// Añadir 100 y 1000 manualmente
+generatedNumbers.push({ word: "yüz", correct: "100" });
+generatedNumbers.push({ word: "bin", correct: "1000" });
+
+// --- 2. BASE DE DATOS DE PALABRAS ---
 const allWords = [
+    ...generatedNumbers, // Inyectamos los números generados aquí
     {word:"aç",correct:"hambriento/a"},{word:"açık",correct:"abierto / claro (color)"},{word:"açmak",correct:"abrir"},
     {word:"ad (isim)",correct:"nombre"},{word:"adres",correct:"dirección"},{word:"Affedersiniz",correct:"Perdone"},
     {word:"Afiyet olsun",correct:"Buen provecho"},{word:"ağaç",correct:"árbol"},{word:"Ağustos",correct:"Agosto"},
@@ -203,7 +225,7 @@ const allWords = [
     {word:"bıçak",correct:"cuchillo"},{word:"su şişesi",correct:"botella de agua"}
 ];
 
-// 2. VARIABLES DE ESTADO
+// 3. VARIABLES DE ESTADO
 let pool = []; 
 let activeQueue = []; 
 let current = null;
@@ -216,7 +238,7 @@ const MASTERY_THRESHOLD = 5;
 let score = 0;
 let progress = {};
 
-// 3. FUNCIONES DE INTERFAZ
+// 4. FUNCIONES DE INTERFAZ
 function setMode(mode, e) {
     gameMode = mode;
     
@@ -243,11 +265,9 @@ function setMode(mode, e) {
     }
 }
 
-// NUEVA FUNCIÓN: Vuelve al menú de inicio
 function showMenu() {
     document.getElementById('game-container').style.display = 'none';
     document.getElementById('start-screen').style.display = 'flex';
-    // Refrescamos los botones de modo para mostrar si hay progreso
     setMode(gameMode); 
 }
 
@@ -267,7 +287,7 @@ function startGame() {
     loadQuestion();
 }
 
-// 4. LÓGICA DE APRENDIZAJE POR BLOQUES
+// 5. LÓGICA DE APRENDIZAJE POR BLOQUES
 function initBlocks() {
     let available = allWords.filter(item => (progress[item.word] || 0) < MASTERY_THRESHOLD);
     available.sort(() => Math.random() - 0.5);
