@@ -220,7 +220,7 @@ let progress = {};
 function getRandomNumberWord() {
     const units = ["", "bir", "iki", "üç", "dört", "beş", "alt", "yedi", "sekiz", "dokuz"];
     const tens = ["", "on", "yirmi", "otuz", "kırk", "elli", "altmış", "yetmiş", "seksen", "doksan"];
-    const specials = [{ n: 100, tr: "yüz" }, { n: 1000, tr: "bin" }, { n: 1000000, tr: "bir milyon" }];
+    const specials = [{ n: 100, tr: "yüz" }, { n: 1000, tr: "bin" }, { n: 1000000, tr: "bir millón" }];
     if (Math.random() < 0.2) {
         let s = specials[Math.floor(Math.random() * specials.length)];
         return { word: s.tr, correct: s.n.toLocaleString() };
@@ -235,9 +235,22 @@ function getRandomNumberWord() {
 
 // 4. FUNCIONES DE INTERFAZ
 function showMenu() {
-    // Solo alternamos visibilidad sin resetear los estilos de los botones de modo
     document.getElementById('game-container').style.display = 'none';
     document.getElementById('start-screen').style.display = 'flex';
+    
+    // Refresco visual de los botones del menú según el modo activo
+    const buttons = document.querySelectorAll('#mode-selector button');
+    buttons.forEach(btn => {
+        if (btn.getAttribute('onclick').includes(`'${gameMode}'`)) {
+            btn.style.opacity = "1";
+            btn.style.transform = "scale(1)";
+            btn.style.border = "2px solid white";
+        } else {
+            btn.style.opacity = "0.5";
+            btn.style.transform = "scale(0.95)";
+            btn.style.border = "none";
+        }
+    });
 }
 
 function setMode(mode, e) {
@@ -250,7 +263,7 @@ function setMode(mode, e) {
         btn.style.border = "none";
     });
 
-    // Resaltar el botón seleccionado (si viene de un evento real)
+    // Resaltar el botón seleccionado
     if (e && e.currentTarget) {
         e.currentTarget.style.opacity = "1";
         e.currentTarget.style.transform = "scale(1)";
@@ -407,7 +420,6 @@ function renderDots(wordKey, mastered = false) {
     }
 }
 
-// Inicialización corregida para que el menú principal sea consistente
 window.onload = () => {
     const firstBtn = document.querySelector('#mode-selector button');
     if(firstBtn) {
