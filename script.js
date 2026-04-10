@@ -197,7 +197,7 @@ const allWords = [
     {word:"çiftçi",correct:"agricultor/a"},{word:"işletmeci",correct:"empresario/a"},{word:"satış temsilcisi",correct:"vendedor/a"},
     {word:"bilim insanı",correct:"científico/a"},{word:"cep telefonu",correct:"teléfono móvil"},{word:"cüzdan",correct:"cartera"},
     {word:"Kurşun kalem",correct:"lápiz"},{word:"uzaktan kumanda",correct:"control remoto, mando"},
-    {word:"diş fırçası",correct:"cepillo de dientes"},{word:"kredi kartı",correct:"tarjeta de crédito"},
+    {word:"diş fırçası",correct:"cepillo de dientes"},{word:"kredi cardı",correct:"tarjeta de crédito"},
     {word:"güneş gözlüğü",correct:"gafas de sol"},{word:"telefon şarjı",correct:"cargador del teléfono"},
     {word:"fincan",correct:"taza"},{word:"kupa",correct:"taza / trofeo"},{word:"alışveriş çantası",correct:"bolsa de la compra"},
     {word:"bıçak",correct:"cuchillo"},{word:"su şişesi",correct:"botella de agua"}
@@ -220,7 +220,7 @@ let progress = {};
 function getRandomNumberWord() {
     const units = ["", "bir", "iki", "üç", "dört", "beş", "alt", "yedi", "sekiz", "dokuz"];
     const tens = ["", "on", "yirmi", "otuz", "kırk", "elli", "altmış", "yetmiş", "seksen", "doksan"];
-    const specials = [{ n: 100, tr: "yüz" }, { n: 1000, tr: "bin" }, { n: 1000000, tr: "bir millón" }];
+    const specials = [{ n: 100, tr: "yüz" }, { n: 1000, tr: "bin" }, { n: 1000000, tr: "bir milyon" }];
     if (Math.random() < 0.2) {
         let s = specials[Math.floor(Math.random() * specials.length)];
         return { word: s.tr, correct: s.n.toLocaleString() };
@@ -236,21 +236,10 @@ function getRandomNumberWord() {
 // 4. FUNCIONES DE INTERFAZ
 function showMenu() {
     document.getElementById('game-container').style.display = 'none';
-    document.getElementById('start-screen').style.display = 'flex';
     
-    // Refresco visual de los botones del menú según el modo activo
-    const buttons = document.querySelectorAll('#mode-selector button');
-    buttons.forEach(btn => {
-        if (btn.getAttribute('onclick').includes(`'${gameMode}'`)) {
-            btn.style.opacity = "1";
-            btn.style.transform = "scale(1)";
-            btn.style.border = "2px solid white";
-        } else {
-            btn.style.opacity = "0.5";
-            btn.style.transform = "scale(0.95)";
-            btn.style.border = "none";
-        }
-    });
+    // Al volver al menú, usamos '' en lugar de 'flex'. 
+    // Esto permite que el CSS original de tu archivo style.css tome el control.
+    document.getElementById('start-screen').style.display = '';
 }
 
 function setMode(mode, e) {
