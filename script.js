@@ -129,7 +129,7 @@ const allWords = [
     {word:"öğrenci",correct:"estudiante"},{word:"öğrenmek",correct:"aprender"},{word:"öğretmen",correct:"profesor/a"},
     {word:"okumak",correct:"leer"},{word:"olmak",correct:"ser / estar"},{word:"önemli",correct:"importante"},
     {word:"önemsiz",correct:"sin importancia"},{word:"opera",correct:"ópera"},{word:"orada",correct:"allí"},
-    {word:"ördek",correct:"pato"},{word:"orman",correct:"bosque"},{word:"otel",correct:"hotel"},
+    {word:"ördek",correct:"pato"},{word:"orman",orchestra:"bosque"},{word:"otel",correct:"hotel"},
     {word:"otobüs",correct:"autobús"},{word:"oturmak",correct:"sentarse / vivir"},{word:"oynamak",correct:"jugar"},
     {word:"özlemek",correct:"extrañar / echar de menos"},{word:"Özür dilerim",correct:"Lo siento"},{word:"pahalı",correct:"caro/a"},
     {word:"paket",correct:"paquete"},{word:"para",correct:"dinero"},{word:"para çekmek",correct:"sacar dinero"},
@@ -191,13 +191,13 @@ const allWords = [
     {word:"zaman",correct:"tiempo"},{word:"zamir",correct:"pronombre"},{word:"zayıf",correct:"delgado/a, débil"},
     {word:"zengin",correct:"rico/a"},{word:"zeytin",correct:"aceituna"},{word:"zürafa",correct:"jirafa"},
     {word:"doktor",correct:"médico/a"},{word:"muhasebeci",correct:"contable"},{word:"aşçı",correct:"cocinero/a"},
-    {word:"mimar",correct:"arquitecto/a"},{word:"veteriner",correct:"veterinario/a"},{word:"diş hekimi",correct:"dentista"},
+    {word:"mimar",correct:"architecto/a"},{word:"veteriner",correct:"veterinario/a"},{word:"diş hekimi",correct:"dentista"},
     {word:"gazeteci",correct:"periodista"},{word:"şoför",correct:"conductor/a"},{word:"pilot",correct:"piloto/a"},
     {word:"işçi",correct:"trabajador/a"},{word:"elektrikçi",correct:"electricista"},{word:"yazar",correct:"escritor/a"},
     {word:"çiftçi",correct:"agricultor/a"},{word:"işletmeci",correct:"empresario/a"},{word:"satış temsilcisi",correct:"vendedor/a"},
     {word:"bilim insanı",correct:"científico/a"},{word:"cep telefonu",correct:"teléfono móvil"},{word:"cüzdan",correct:"cartera"},
     {word:"Kurşun kalem",correct:"lápiz"},{word:"uzaktan kumanda",correct:"control remoto, mando"},
-    {word:"diş fırçası",correct:"cepillo de dientes"},{word:"kredi cardı",correct:"tarjeta de crédito"},
+    {word:"diş fırçası",correct:"cepillo de dientes"},{word:"kredi kartı",correct:"tarjeta de crédito"},
     {word:"güneş gözlüğü",correct:"gafas de sol"},{word:"telefon şarjı",correct:"cargador del teléfono"},
     {word:"fincan",correct:"taza"},{word:"kupa",correct:"taza / trofeo"},{word:"alışveriş çantası",correct:"bolsa de la compra"},
     {word:"bıçak",correct:"cuchillo"},{word:"su şişesi",correct:"botella de agua"}
@@ -207,6 +207,7 @@ const allWords = [
 let pool = []; 
 let activeQueue = []; 
 let current = null;
+let lastWord = null; // Memoria para evitar repeticiones seguidas
 let locked = false;
 let gameMode = 'tr-es'; 
 let currentRoundMode = 'tr-es'; 
@@ -216,17 +217,20 @@ const MASTERY_THRESHOLD = 5;
 let score = 0;
 let progress = {};
 
-// 3. GENERADOR DE NÚMEROS
+// 3. GENERADOR DE NÚMEROS (Corregido con altı)
 function getRandomNumberWord() {
     const units = ["", "bir", "iki", "üç", "dört", "beş", "altı", "yedi", "sekiz", "dokuz"];
     const tens = ["", "on", "yirmi", "otuz", "kırk", "elli", "altmış", "yetmiş", "seksen", "doksan"];
     const specials = [{ n: 100, tr: "yüz" }, { n: 1000, tr: "bin" }, { n: 1000000, tr: "bir milyon" }];
+    
     if (Math.random() < 0.2) {
         let s = specials[Math.floor(Math.random() * specials.length)];
         return { word: s.tr, correct: s.n.toLocaleString() };
     }
+    
     let n = Math.floor(Math.random() * 100);
     if (n === 0) return { word: "sıfır", correct: "0" };
+    
     let ten = Math.floor(n / 10);
     let unit = n % 10;
     let tr = (tens[ten] + " " + units[unit]).trim();
@@ -236,34 +240,26 @@ function getRandomNumberWord() {
 // 4. FUNCIONES DE INTERFAZ
 function showMenu() {
     document.getElementById('game-container').style.display = 'none';
-    
-    // Al volver al menú, usamos '' en lugar de 'flex'. 
-    // Esto permite que el CSS original de tu archivo style.css tome el control.
     document.getElementById('start-screen').style.display = '';
 }
 
 function setMode(mode, e) {
     gameMode = mode;
-    
-    // Reset visual de todos los botones
     document.querySelectorAll('#mode-selector .primary-btn').forEach(btn => {
         btn.style.opacity = "0.5";
         btn.style.transform = "scale(0.95)";
         btn.style.border = "none";
     });
 
-    // Resaltar el botón seleccionado
     if (e && e.currentTarget) {
         e.currentTarget.style.opacity = "1";
         e.currentTarget.style.transform = "scale(1)";
         e.currentTarget.style.border = "2px solid white";
     }
 
-    // Cargar datos del modo seleccionado
     score = parseInt(localStorage.getItem(`turco_score_${mode}`)) || 0;
     progress = JSON.parse(localStorage.getItem(`turco_progress_${mode}`)) || {};
     
-    // Mostrar/Ocultar botón de continuar
     const resumeBtn = document.getElementById('resume-button');
     if (resumeBtn) {
         resumeBtn.style.display = (score > 0 || Object.keys(progress).length > 0) ? 'block' : 'none';
@@ -309,9 +305,26 @@ function loadQuestion() {
         document.getElementById("options").innerHTML = "";
         return;
     }
+    
     locked = false;
     let isNumber = Math.random() < 0.10;
-    current = isNumber ? getRandomNumberWord() : activeQueue[Math.floor(Math.random() * activeQueue.length)];
+    
+    // LÓGICA ANTI-REPETICIÓN
+    let selectedItem;
+    if (isNumber) {
+        selectedItem = getRandomNumberWord();
+    } else {
+        if (activeQueue.length > 1) {
+            do {
+                selectedItem = activeQueue[Math.floor(Math.random() * activeQueue.length)];
+            } while (selectedItem.word === lastWord);
+        } else {
+            selectedItem = activeQueue[0];
+        }
+    }
+    
+    current = selectedItem;
+    lastWord = isNumber ? null : current.word;
     
     if (gameMode === 'mixed') { 
         currentRoundMode = Math.random() > 0.5 ? 'tr-es' : 'es-tr'; 
