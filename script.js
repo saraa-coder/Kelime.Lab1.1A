@@ -350,7 +350,7 @@ function handleAnswer(selected, correct) {
 
     updateStats();
     renderDots(wordKey);
-    setTimeout(loadQuestion, 1000);
+    setTimeout(loadQuestion, 2000);
 }
 
 function renderDots(wordKey) {
