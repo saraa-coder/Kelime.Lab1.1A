@@ -257,9 +257,10 @@ function setMode(mode, event) {
 function resetAndStart() {
     score = 0;
     progress = {};
+    // Añade esta línea para que el botón de continuar desaparezca al reiniciar
+    document.getElementById('resume-button').style.display = 'none';
     startGame();
 }
-
 function startGame() {
     document.getElementById('start-screen').style.display = 'none';
     document.getElementById('game-container').style.display = 'flex';
