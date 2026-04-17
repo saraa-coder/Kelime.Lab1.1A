@@ -234,7 +234,7 @@ function hablarTurco(texto) {
     window.speechSynthesis.cancel();
     const mensaje = new SpeechSynthesisUtterance(texto);
     mensaje.lang = 'tr-TR';
-    mensaje.rate = 0.8;
+    mensaje.rate = 0.7;
     const voces = window.speechSynthesis.getVoices();
     const vozTurca = voces.find(v => v.lang.includes('tr')) || voces[0];
     if (vozTurca) mensaje.voice = vozTurca;
