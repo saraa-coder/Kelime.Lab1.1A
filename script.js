@@ -1,6 +1,6 @@
 /**
- * JUEGO DE VOCABULARIO TURCO-ESPAÑOL 
- * Kelime Lab 1.1A con Voz Emel y Auto-Mute
+ * KELIME LAB 1.1A - CÓDIGO COMPLETO
+ * Vocabulario + Lógica + Audio
  */
 
 // 1. BASE DE DATOS DE PALABRAS
@@ -117,4 +117,273 @@ const allWords = [
     {word:"Mart",correct:"marzo"},{word:"masa",correct:"mesa"},{word:"mavi",correct:"azul"},
     {word:"Mayıs",correct:"mayo"},{word:"memur",correct:"funcionario/a"},{word:"merdiven",correct:"escalera"},
     {word:"Merhaba",correct:"Hola"},{word:"meşgul",correct:"ocupado/a"},{word:"metro",correct:"metro"},
-    {word:"mev
+    {word:"mevsimler",correct:"estaciones del año"},{word:"millet",correct:"nación"},{word:"misal",correct:"ejemplo"},
+    {word:"mor",correct:"morado"},{word:"mp3 çalar",correct:"reproductor mp3"},{word:"mühendis",correct:"ingeniero/a"},
+    {word:"müsait",correct:"disponible"},{word:"mutfak",correct:"cocina"},{word:"mutlu",correct:"feliz"},
+    {word:"mutsuz",correct:"infeliz / triste"},{word:"nar",correct:"granada (fruta)"},{word:"nefes",correct:"respiración"},
+    {word:"nefret etmek",correct:"odiar"},{word:"nerede",correct:"dónde"},{word:"nesne",correct:"objeto"},
+    {word:"niçin",correct:"por qué"},{word:"Nijerya",correct:"Nigeria"},{word:"Nisan",correct:"abril"},
+    {word:"normal",correct:"normal"},{word:"numara",correct:"número"},{word:"ocak",correct:"enero / fogón"},
+    {word:"oda",correct:"habitación"},{word:"ödemek",correct:"pagar"},{word:"ofis",correct:"oficina"},
+    {word:"Oğlak Burcu",correct:"Capricornio"},{word:"öğleden sonra",correct:"por la tarde"},{word:"öğlen",correct:"mediodía"},
+    {word:"öğrenci",correct:"estudiante"},{word:"öğrenmek",correct:"aprender"},{word:"öğretmen",correct:"profesor/a"},
+    {word:"okumak",correct:"leer"},{word:"olmak",correct:"ser / estar"},{word:"önemli",correct:"importante"},
+    {word:"önemsiz",correct:"sin importancia"},{word:"opera",correct:"ópera"},{word:"orada",correct:"allí"},
+    {word:"ördek",correct:"pato"},{word:"orman",correct:"bosque"},{word:"otel",correct:"hotel"},
+    {word:"otobüs",correct:"autobús"},{word:"oturmak",correct:"sentarse / vivir"},{word:"oynamak",correct:"jugar"},
+    {word:"özlemek",correct:"extrañar / echar de menos"},{word:"Özür dilerim",correct:"Lo siento"},{word:"pahalı",correct:"caro/a"},
+    {word:"paket",correct:"paquete"},{word:"para",correct:"dinero"},{word:"para çekmek",correct:"sacar dinero"},
+    {word:"pardösü",correct:"abrigo"},{word:"park",correct:"parque"},{word:"pastane",correct:"pastelería"},
+    {word:"patates",correct:"patata"},{word:"Pazar",correct:"domingo"},{word:"Pazartesi",correct:"lunes"},
+    {word:"pembe",correct:"rosa"},{word:"pencere",correct:"ventana"},{word:"Perşembe",correct:"jueves"},
+    {word:"petrol",correct:"petróleo"},{word:"pijama",correct:"pijama"},{word:"pişirmek",correct:"cocinar"},
+    {word:"piyano",correct:"piano"},{word:"polis",correct:"policía"},{word:"portakal",correct:"naranja"},
+    {word:"postacı",correct:"cartero/a"},{word:"projektör",correct:"proyector"},{word:"psikolog",correct:"psicólogo/a"},
+    {word:"radyo",correct:"radio"},{word:"rengarenk",correct:"multicolor / de mil colores"},{word:"renk",correct:"color"},
+    {word:"renkli",correct:"colorido/a"},{word:"resepsiyonist",correct:"recepcionista"},{word:"resim",correct:"cuadro / dibujo"},
+    {word:"restoran",correct:"restaurante"},{word:"Rica ederim",correct:"De nada"},{word:"rol",correct:"papel / rol"},
+    {word:"roman",correct:"novela"},{word:"Rusya",correct:"Rusia"},{word:"saat",correct:"reloj / hora"},
+    {word:"sabah",correct:"mañana"},{word:"sabahları",correct:"por las mañanas"},{word:"saç",correct:"cabello"},
+    {word:"sağlıklı",correct:"saludable"},{word:"sakin",correct:"tranquilo/a"},{word:"Salı",correct:"martes"},
+    {word:"salon",correct:"salón"},{word:"sandalye",correct:"silla"},{word:"sanmak",correct:"creer / suponer"},
+    {word:"sari",correct:"amarillo"},{word:"sarışın",correct:"rubio/a"},{word:"şarkı",correct:"canción"},
+    {word:"şarkıcı",correct:"cantante"},{word:"sayı",correct:"número"},{word:"sefer",correct:"vez / viaje"},
+    {word:"şehir",correct:"ciudad"},{word:"sehpa",correct:"mesa de café"},{word:"sekreter",correct:"secretario/a"},
+    {word:"sembol",correct:"símbolo"},{word:"şemsiye",correct:"paraguas"},{word:"semt",correct:"barrio"},
+    {word:"sergi",correct:"exposición"},{word:"sessiz",correct:"silencioso"},{word:"sevmek",correct:"amar / gustar"},
+    {word:"seyahat",correct:"viaje"},{word:"sıfat",correct:"adjetivo"},{word:"şiir",correct:"poema"},
+    {word:"sıkılmak",correct:"aburrirse"},{word:"silgi",correct:"borrador"},{word:"şimdi",correct:"ahora"},
+    {word:"sinirli",correct:"enfadado/a, nervioso/a"},{word:"sıra",correct:"fila / pupitre"},{word:"şişe",correct:"botella"},
+    {word:"şişman",correct:"gordo/a"},{word:"site",correct:"sitio web"},{word:"siyah",correct:"negro"},
+    {word:"siyah saçlı",correct:"pelo negro"},{word:"sohbet etmek",correct:"charlar"},{word:"sokak",correct:"calle"},
+    {word:"sonbahar",correct:"otoño"},{word:"sormak",correct:"preguntar"},{word:"soru",correct:"pregunta"},
+    {word:"sorun",correct:"problema"},{word:"sosyal",correct:"social"},{word:"soyadı",correct:"apellido"},
+    {word:"söylemek",correct:"decir"},{word:"sözlük",correct:"diccionario"},{word:"spor yapmak",correct:"hacer deporte"},
+    {word:"stres atmak",correct:"desestresarse"},{word:"Şubat",correct:"febrero"},{word:"Suriye",correct:"Siria"},
+    {word:"tabak",correct:"plato"},{word:"tahta",correct:"madera / pizarra"},{word:"Tamam",correct:"Vale / De acuerdo"},
+    {word:"tanımak",correct:"conocer"},{word:"tanışmak",correct:"conocerse"},{word:"tarih",correct:"fecha / historia"},
+    {word:"tatil",correct:"vacaciones"},{word:"tavuk",correct:"pollo"},{word:"Tebrikler",correct:"Felicidades"},
+    {word:"tehlikeli",correct:"peligroso/a"},{word:"tekrar etmek",correct:"repetir"},{word:"telefon",correct:"teléfono"},
+    {word:"tembel",correct:"perezoso/a"},{word:"temiz",correct:"limpio"},{word:"temizlemek",correct:"limpiar"},
+    {word:"Temmuz",correct:"julio"},{word:"Terazi Burcu",correct:"Libra"},{word:"terlik",correct:"zapatillas"},
+    {word:"tezgâhtar",correct:"dependiente/a"},{word:"tırmanmak",correct:"escalar"},{word:"tiyatro",correct:"teatro"},
+    {word:"top",correct:"pelota"},{word:"tur",correct:"tour"},{word:"tür",correct:"tipo"},
+    {word:"turist",correct:"turista"},{word:"Türkiye",correct:"Turquía"},{word:"turuncu",correct:"naranja"},
+    {word:"tuzlu",correct:"salado/a"},{word:"uçak",correct:"avión"},{word:"uçurtma",correct:"cometa"},
+    {word:"ucuz",correct:"barato/a"},{word:"üst",correct:"arriba / sobre"},{word:"uygun",correct:"adecuado/a"},
+    {word:"uyumak",correct:"dormir"},{word:"uzak",correct:"lejos"},{word:"uzanmak",correct:"tumbarse"},
+    {word:"üzüm",correct:"uva"},{word:"uzun saçlı",correct:"pelo largo"},{word:"vagon",correct:"vagón"},
+    {word:"vapur",correct:"barco / ferry"},{word:"var",correct:"hay"},{word:"varmak",correct:"llegar"},
+    {word:"vazo",correct:"jarrón"},{word:"vermek",correct:"dar"},{word:"yabancı",correct:"extranjero/a"},
+    {word:"yakın",correct:"cerca"},{word:"yakışıklı",correct:"guapo"},{word:"yalan",correct:"mentira"},
+    {word:"yanlış",correct:"equivocado"},{word:"yapmak",correct:"hacer"},{word:"yardım etmek",correct:"ayudar"},
+    {word:"yardım istemek",correct:"pedir ayuda"},{word:"yaş",correct:"edad"},{word:"yaşamak",correct:"vivir"},
+    {word:"yaşlı",correct:"anciano/a"},{word:"yastık",correct:"almohada"},{word:"yatmak",correct:"acostarse"},
+    {word:"yavaş",correct:"lento/a"},{word:"Yay Burcu",correct:"Sagitario"},{word:"yaz",correct:"verano"},
+    {word:"yazı tahtası",correct:"pizarra"},{word:"yazmak",correct:"escribir"},{word:"yemek",correct:"comer"},
+    {word:"yemekhane",correct:"comedor (escolar / de empresa)"},{word:"Yengeç Burcu",correct:"Cáncer"},
+    {word:"yeni",correct:"nuevo/a"},{word:"yeni yıl",correct:"año nuevo"},{word:"yer",correct:"lugar"},
+    {word:"yeşil",correct:"verde"},{word:"yıl",correct:"año"},{word:"yıldız",correct:"estrella"},
+    {word:"yiyecek",correct:"alimento"},{word:"yoğun",correct:"intenso / ocupado"},{word:"yok",correct:"no hay"},
+    {word:"yolcu",correct:"pasajero/a"},{word:"yorgun",correct:"cansado/a"},{word:"yorulmak",correct:"cansarse"},
+    {word:"yorum",correct:"comentario"},{word:"yurt",correct:"residencia (estudiantil) / patria"},
+    {word:"yürümek",correct:"caminar"},{word:"yüzmek",correct:"nadar"},{word:"yüzük",correct:"anillo"},
+    {word:"zaman",correct:"tiempo"},{word:"zamir",correct:"pronombre"},{word:"zayıf",correct:"delgado/a, débil"},
+    {word:"zengin",correct:"rico/a"},{word:"zeytin",correct:"aceituna"},{word:"zürafa",correct:"jirafa"},
+    {word:"doktor",correct:"médico/a"},{word:"muhasebeci",correct:"contable"},{word:"aşçı",correct:"cocinero/a"},
+    {word:"mimar",correct:"architecto/a"},{word:"veteriner",correct:"veterinario/a"},{word:"diş hekimi",correct:"dentista"},
+    {word:"gazeteci",correct:"periodista"},{word:"şoför",correct:"conductor/a"},{word:"pilot",correct:"piloto/a"},
+    {word:"işçi",correct:"trabajador/a"},{word:"elektrikçi",correct:"electricista"},{word:"yazar",correct:"escritor/a"},
+    {word:"çiftçi",correct:"agricultor/a"},{word:"işletmeci",correct:"empresario/a"},{word:"satış temsilcisi",correct:"vendedor/a"},
+    {word:"bilim insanı",correct:"científico/a"},{word:"cep telefonu",correct:"teléfono móvil"},{word:"cüzdan",correct:"cartera"},
+    {word:"Kurşun kalem",correct:"lápiz"},{word:"uzaktan kumanda",correct:"control remoto, mando"},
+    {word:"diş fırçası",correct:"cepillo de dientes"},{word:"kredi kartı",correct:"tarjeta de crédito"},
+    {word:"güneş gözlüğü",correct:"gafas de sol"},{word:"telefon şarjı",correct:"cargador del teléfono"},
+    {word:"fincan",correct:"taza"},{word:"kupa",correct:"taza / trofeo"},{word:"alışveriş çantası",correct:"bolsa de la compra"},
+    {word:"bıçak",correct:"cuchillo"},{word:"su şişesi",correct:"botella de agua"}
+];
+
+// 2. VARIABLES DE ESTADO
+let gameMode = 'tr-es';
+let currentRoundMode = 'tr-es';
+let score = 0;
+let progress = {};
+let current = null;
+let activeQueue = [];
+let locked = false;
+let isMuted = false;
+
+const MASTERY_THRESHOLD = 5;
+
+// --- 3. FUNCIONES DE AUDIO ---
+function hablarTurco(texto) {
+    if (isMuted) return;
+    window.speechSynthesis.cancel();
+    
+    const mensaje = new SpeechSynthesisUtterance(texto);
+    mensaje.lang = 'tr-TR';
+    mensaje.rate = 0.8;
+
+    const voces = window.speechSynthesis.getVoices();
+    // Prioridad a la voz de Emel (común en Windows/Chrome)
+    const vozTurca = voces.find(v => v.name.includes('Emel')) || voces.find(v => v.lang.includes('tr')) || voces[0];
+    
+    if (vozTurca) mensaje.voice = vozTurca;
+    window.speechSynthesis.speak(mensaje);
+}
+
+// Inicializar voces para el navegador
+window.speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices();
+
+// --- 4. FUNCIONES DE INTERFAZ ---
+function setMode(mode, event) {
+    gameMode = mode;
+    document.querySelectorAll('#mode-selector .primary-btn').forEach(btn => {
+        btn.style.border = "none";
+        btn.style.opacity = "0.6";
+    });
+    if (event && event.currentTarget) {
+        event.currentTarget.style.border = "3px solid white";
+        event.currentTarget.style.opacity = "1";
+    }
+}
+
+function resetAndStart() {
+    score = 0;
+    progress = {};
+    startGame();
+}
+
+function startGame() {
+    document.getElementById('start-screen').style.display = 'none';
+    document.getElementById('game-container').style.display = 'flex';
+    
+    // Desbloqueo de audio
+    hablarTurco(""); 
+    
+    initQueue();
+    updateStats();
+    loadQuestion();
+}
+
+function showMenu() {
+    document.getElementById('game-container').style.display = 'none';
+    document.getElementById('start-screen').style.display = 'block';
+}
+
+function updateStats() {
+    const scoreEl = document.getElementById("score");
+    const percentEl = document.getElementById("percent");
+    if (scoreEl) scoreEl.textContent = score + " tamamlanan";
+    if (percentEl) {
+        let p = Math.round((score / allWords.length) * 100);
+        percentEl.textContent = "%" + p;
+    }
+}
+
+// --- 5. LÓGICA DE JUEGO ---
+function initQueue() {
+    // Tomamos 25 palabras al azar que no hayan sido completadas
+    activeQueue = [...allWords]
+        .filter(w => (progress[w.word] || 0) < MASTERY_THRESHOLD)
+        .sort(() => Math.random() - 0.5)
+        .slice(0, 25);
+}
+
+function loadQuestion() {
+    if (activeQueue.length === 0) {
+        initQueue(); // Recargar si se vacía
+    }
+
+    locked = false;
+    current = activeQueue[Math.floor(Math.random() * activeQueue.length)];
+    
+    // Determinar modo de la ronda (si es Mixto)
+    if (gameMode === 'mixed') {
+        currentRoundMode = Math.random() > 0.5 ? 'tr-es' : 'es-tr';
+    } else {
+        currentRoundMode = gameMode;
+    }
+
+    const wordEl = document.getElementById("word");
+    const optionsEl = document.getElementById("options");
+    const dotsEl = document.getElementById("dots");
+
+    // Mostrar palabra principal
+    wordEl.textContent = (currentRoundMode === 'tr-es') ? current.word : current.correct;
+    
+    // AUDIO: Suena al aparecer si es Turco -> Español
+    if (currentRoundMode === 'tr-es') hablarTurco(current.word);
+
+    // Dibujar puntos de progreso (dots)
+    renderDots(current.word);
+
+    // Generar opciones
+    let correctText = (currentRoundMode === 'tr-es') ? current.correct : current.word;
+    let opts = new Set([correctText]);
+    while(opts.size < 4) {
+        let r = allWords[Math.floor(Math.random() * allWords.length)];
+        let text = (currentRoundMode === 'tr-es') ? r.correct : r.word;
+        opts.add(text);
+    }
+
+    optionsEl.innerHTML = "";
+    [...opts].sort(() => Math.random() - 0.5).forEach(opt => {
+        let btn = document.createElement("button");
+        btn.className = "option";
+        btn.textContent = opt;
+        btn.onclick = (e) => handleAnswer(opt, correctText, e.target);
+        optionsEl.appendChild(btn);
+    });
+}
+
+function handleAnswer(selected, correct, btn) {
+    if (locked) return;
+    locked = true;
+
+    // AUDIO: Suena al responder si es Español -> Turco
+    if (currentRoundMode === 'es-tr') hablarTurco(current.word);
+
+    const isCorrect = (selected === correct);
+    const wordKey = current.word;
+
+    // Marcar visualmente
+    document.querySelectorAll(".option").forEach(b => {
+        if (b.textContent === correct) b.style.backgroundColor = "#10b981";
+        if (b.textContent === selected && !isCorrect) b.style.backgroundColor = "#ef4444";
+    });
+
+    if (isCorrect) {
+        progress[wordKey] = (progress[wordKey] || 0) + 1;
+        if (progress[wordKey] >= MASTERY_THRESHOLD) {
+            score++;
+            activeQueue = activeQueue.filter(w => w.word !== wordKey);
+        }
+    } else {
+        if (progress[wordKey] > 0) progress[wordKey]--;
+    }
+
+    updateStats();
+    renderDots(wordKey);
+
+    setTimeout(loadQuestion, 1000);
+}
+
+function renderDots(wordKey) {
+    const container = document.getElementById("dots");
+    if (!container) return;
+    container.innerHTML = "";
+    let val = progress[wordKey] || 0;
+    for (let i = 0; i < MASTERY_THRESHOLD; i++) {
+        let d = document.createElement("div");
+        d.className = "dot" + (i < val ? " active" : "");
+        container.appendChild(d);
+    }
+}
+
+// Iniciar al cargar
+window.onload = () => {
+    window.speechSynthesis.getVoices();
+    const btnDefault = document.querySelector('#mode-selector button');
+    if (btnDefault) setMode('tr-es', { currentTarget: btnDefault });
+};
