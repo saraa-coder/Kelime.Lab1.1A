@@ -354,7 +354,7 @@ function handleAnswer(selected, correct) {
 
     updateStats();
     renderDots(wordKey);
-    setTimeout(loadQuestion, 1300);
+    setTimeout(loadQuestion, 1200);
 }
 
 function renderDots(wordKey) {
