@@ -257,10 +257,10 @@ function setMode(mode, event) {
 function resetAndStart() {
     score = 0;
     progress = {};
-    // Añade esta línea para que el botón de continuar desaparezca al reiniciar
     document.getElementById('resume-button').style.display = 'none';
     startGame();
 }
+
 function startGame() {
     document.getElementById('start-screen').style.display = 'none';
     document.getElementById('game-container').style.display = 'flex';
@@ -274,7 +274,6 @@ function showMenu() {
     document.getElementById('game-container').style.display = 'none';
     document.getElementById('start-screen').style.display = 'block';
     
-    // Esto es lo que falta:
     const resumeBtn = document.getElementById('resume-button');
     if (score > 0 || Object.keys(progress).length > 0) {
         resumeBtn.style.display = 'block';
@@ -302,6 +301,12 @@ function initQueue() {
 function loadQuestion() {
     if (activeQueue.length === 0) initQueue();
     locked = false;
+    
+    // LIMPIEZA DE EFECTOS
+    const wordEl = document.getElementById("word");
+    wordEl.classList.remove("word-mastered");
+    document.getElementById("game-container").classList.remove("has-mastered");
+
     current = activeQueue[Math.floor(Math.random() * activeQueue.length)];
     if (gameMode === 'mixed') {
         currentRoundMode = Math.random() > 0.5 ? 'tr-es' : 'es-tr';
@@ -309,16 +314,16 @@ function loadQuestion() {
         currentRoundMode = gameMode;
     }
 
-    const wordEl = document.getElementById("word");
-    const optionsEl = document.getElementById("options");
     wordEl.textContent = (currentRoundMode === 'tr-es') ? current.word : current.correct;
     
+    // AUDIO AUTOMÁTICO AL CARGAR (Solo Tr-Es)
     if (currentRoundMode === 'tr-es') {
-    setTimeout(() => {
-        hablarTurco(current.word);
-    }, 500); // Esto añade el medio segundo de espera
-}
-renderDots(current.word);
+        setTimeout(() => {
+            hablarTurco(current.word);
+        }, 500);
+    }
+
+    renderDots(current.word);
 
     let correctText = (currentRoundMode === 'tr-es') ? current.correct : current.word;
     let opts = new Set([correctText]);
@@ -327,6 +332,7 @@ renderDots(current.word);
         opts.add(currentRoundMode === 'tr-es' ? r.correct : r.word);
     }
 
+    const optionsEl = document.getElementById("options");
     optionsEl.innerHTML = "";
     [...opts].sort(() => Math.random() - 0.5).forEach(opt => {
         let btn = document.createElement("button");
@@ -340,7 +346,10 @@ renderDots(current.word);
 function handleAnswer(selected, correct) {
     if (locked) return;
     locked = true;
+
+    // AUDIO AL CLICAR
     if (currentRoundMode === 'es-tr') hablarTurco(current.word);
+
     const isCorrect = (selected === correct);
     const wordKey = current.word;
 
@@ -350,12 +359,20 @@ function handleAnswer(selected, correct) {
     });
 
     if (isCorrect) {
+        // AUDIO DE CONFIRMACIÓN
+        if (currentRoundMode === 'tr-es') hablarTurco(current.word);
+        
         progress[wordKey] = (progress[wordKey] || 0) + 1;
+
+        // EFECTO VERDE SI LLEGA A 5
         if (progress[wordKey] >= MASTERY_THRESHOLD) {
+            document.getElementById("word").classList.add("word-mastered");
+            document.getElementById("game-container").classList.add("has-mastered");
             score++;
             activeQueue = activeQueue.filter(w => w.word !== wordKey);
         }
     } else {
+        if (currentRoundMode === 'tr-es') hablarTurco(current.word);
         if (progress[wordKey] > 0) progress[wordKey]--;
     }
 
@@ -371,7 +388,10 @@ function renderDots(wordKey) {
     let val = progress[wordKey] || 0;
     for (let i = 0; i < MASTERY_THRESHOLD; i++) {
         let d = document.createElement("div");
-        d.className = "dot" + (i < val ? " active" : "");
+        d.className = "dot";
+        if (i < val) {
+            d.className += (val >= MASTERY_THRESHOLD) ? " mastered" : " active";
+        }
         container.appendChild(d);
     }
 }
