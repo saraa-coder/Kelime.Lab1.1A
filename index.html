@@ -9,27 +9,27 @@
 <body>
 
     <div id="start-screen">
-        <h1>Kelime Lab <span class="version-badge">1.1A</span></h1>
+        <h1>Kelime Lab 1.1A</h1>
         
         <div id="mode-selector">
-            <button onclick="setMode('tr-es', event)" class="primary-btn">
+            <button onclick="setMode('tr-es', event)" class="primary-btn" style="background-color: #10b981;">
                 Türkçe ➔ Español
             </button>
-            <button onclick="setMode('es-tr', event)" class="primary-btn">
+            <button onclick="setMode('es-tr', event)" class="primary-btn" style="background-color: #f59e0b;">
                 Español ➔ Türkçe
             </button>
-            <button onclick="setMode('mixed', event)" class="primary-btn">
+            <button onclick="setMode('mixed', event)" class="primary-btn" style="background-color: #ec4899;">
                 Karışık
             </button>
         </div>
 
-        <hr style="margin: 25px 0; border: 0; border-top: 1px solid rgba(0,0,0,0.05); width: 100%;">
+        <hr style="margin: 25px 0; border: 0; border-top: 1px solid rgba(255,255,255,0.1); width: 100%;">
 
         <div id="action-buttons">
-            <button id="start-button" onclick="resetAndStart()" class="primary-btn">
-                BAŞLA
+            <button id="start-button" onclick="resetAndStart()" class="primary-btn" style="background-color: #3949ab;">
+                YENİ OYUN
             </button>
-            <button id="resume-button" onclick="startGame()" class="primary-btn" style="display: none;">
+            <button id="resume-button" onclick="startGame()" class="primary-btn" style="display: none; background-color: #5c6bc0;">
                 DEVAM ET
             </button>
         </div>
