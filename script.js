@@ -272,6 +272,12 @@ function startGame() {
 function showMenu() {
     document.getElementById('game-container').style.display = 'none';
     document.getElementById('start-screen').style.display = 'block';
+    
+    // Esto es lo que falta:
+    const resumeBtn = document.getElementById('resume-button');
+    if (score > 0 || Object.keys(progress).length > 0) {
+        resumeBtn.style.display = 'block';
+    }
 }
 
 function updateStats() {
