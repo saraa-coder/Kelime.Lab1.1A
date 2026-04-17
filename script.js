@@ -173,7 +173,7 @@ const allWords = [
     {word:"üzüm",correct:"uva"},{word:"uzun saçlı",correct:"pelo largo"},{word:"vagon",correct:"vagón"},
     {word:"vapur",correct:"barco / ferry"},{word:"var",correct:"hay"},{word:"varmak",correct:"llegar"},
     {word:"vazo",correct:"jarrón"},{word:"vermek",correct:"dar"},{word:"yabancı",correct:"extranjero/a"},
-    {word:"yakın",correct:"cerca"},{word:"yakışıklı",correct:"guapo"},{word:"yalan",correct:"metira"},
+    {word:"yakın",correct:"cerca"},{word:"yakışıklı",correct:"guapo"},{word:"yalan",correct:"mentira"},
     {word:"yanlış",correct:"equivocado"},{word:"yapmak",correct:"hacer"},{word:"yardım etmek",correct:"ayudar"},
     {word:"yardım istemek",correct:"pedir ayuda"},{word:"yaş",correct:"edad"},{word:"yaşamak",correct:"vivir"},
     {word:"yaşlı",correct:"anciano/a"},{word:"yastık",correct:"almohada"},{word:"yatmak",correct:"acostarse"},
