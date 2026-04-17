@@ -306,8 +306,12 @@ function loadQuestion() {
     const optionsEl = document.getElementById("options");
     wordEl.textContent = (currentRoundMode === 'tr-es') ? current.word : current.correct;
     
-    if (currentRoundMode === 'tr-es') hablarTurco(current.word);
-    renderDots(current.word);
+    if (currentRoundMode === 'tr-es') {
+    setTimeout(() => {
+        hablarTurco(current.word);
+    }, 500); // Esto añade el medio segundo de espera
+}
+renderDots(current.word);
 
     let correctText = (currentRoundMode === 'tr-es') ? current.correct : current.word;
     let opts = new Set([correctText]);
