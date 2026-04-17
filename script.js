@@ -1,9 +1,7 @@
 /**
- * KELIME LAB 1.1A - CÓDIGO COMPLETO
- * Vocabulario + Lógica + Audio
+ * KELIME LAB 1.1 - LISTA OFICIAL COMPLETA
  */
 
-// 1. BASE DE DATOS DE PALABRAS
 const allWords = [
     {word:"aç",correct:"hambriento/a"},{word:"açık",correct:"abierto / claro (color)"},{word:"açmak",correct:"abrir"},
     {word:"ad (isim)",correct:"nombre"},{word:"adres",correct:"dirección"},{word:"Affedersiniz",correct:"Perdone"},
@@ -49,7 +47,7 @@ const allWords = [
     {word:"doğum tarihi",correct:"fecha nacimiento"},{word:"dolap",correct:"armario"},{word:"dolaşmak",correct:"pasear"},
     {word:"dolu",correct:"lleno/a"},{word:"domates",correct:"tomate"},{word:"dönmek",correct:"volver"},
     {word:"dosya",correct:"archivo"},{word:"düğün",correct:"boda"},{word:"durak",correct:"parada"},
-    {word:"durmak",correct:"parar"},{word:"duš almak",correct:"ducharse"},{word:"duvar",correct:"pared"},
+    {word:"durmak",correct:"parar"},{word:"duş almak",correct:"ducharse"},{word:"duvar",correct:"pared"},
     {word:"düz saçlı",correct:"pelo liso"},{word:"düzenli",correct:"ordenado/a"},{word:"eczacı",correct:"farmacéutico/a"},
     {word:"eczane",correct:"farmacia"},{word:"eğlenceli",correct:"divertido/a"},{word:"Ekim",correct:"octubre"},
     {word:"ekmek",correct:"pan"},{word:"ekonomi",correct:"economía"},{word:"eksi",correct:"menos"},{word:"derece",correct:"grado"},
@@ -146,7 +144,7 @@ const allWords = [
     {word:"sabah",correct:"mañana"},{word:"sabahları",correct:"por las mañanas"},{word:"saç",correct:"cabello"},
     {word:"sağlıklı",correct:"saludable"},{word:"sakin",correct:"tranquilo/a"},{word:"Salı",correct:"martes"},
     {word:"salon",correct:"salón"},{word:"sandalye",correct:"silla"},{word:"sanmak",correct:"creer / suponer"},
-    {word:"sari",correct:"amarillo"},{word:"sarışın",correct:"rubio/a"},{word:"şarkı",correct:"canción"},
+    {word:"sarı",correct:"amarillo"},{word:"sarışın",correct:"rubio/a"},{word:"şarkı",correct:"canción"},
     {word:"şarkıcı",correct:"cantante"},{word:"sayı",correct:"número"},{word:"sefer",correct:"vez / viaje"},
     {word:"şehir",correct:"ciudad"},{word:"sehpa",correct:"mesa de café"},{word:"sekreter",correct:"secretario/a"},
     {word:"sembol",correct:"símbolo"},{word:"şemsiye",correct:"paraguas"},{word:"semt",correct:"barrio"},
@@ -175,7 +173,7 @@ const allWords = [
     {word:"üzüm",correct:"uva"},{word:"uzun saçlı",correct:"pelo largo"},{word:"vagon",correct:"vagón"},
     {word:"vapur",correct:"barco / ferry"},{word:"var",correct:"hay"},{word:"varmak",correct:"llegar"},
     {word:"vazo",correct:"jarrón"},{word:"vermek",correct:"dar"},{word:"yabancı",correct:"extranjero/a"},
-    {word:"yakın",correct:"cerca"},{word:"yakışıklı",correct:"guapo"},{word:"yalan",correct:"mentira"},
+    {word:"yakın",correct:"cerca"},{word:"yakışıklı",correct:"guapo"},{word:"yalan",correct:"metira"},
     {word:"yanlış",correct:"equivocado"},{word:"yapmak",correct:"hacer"},{word:"yardım etmek",correct:"ayudar"},
     {word:"yardım istemek",correct:"pedir ayuda"},{word:"yaş",correct:"edad"},{word:"yaşamak",correct:"vivir"},
     {word:"yaşlı",correct:"anciano/a"},{word:"yastık",correct:"almohada"},{word:"yatmak",correct:"acostarse"},
@@ -191,7 +189,7 @@ const allWords = [
     {word:"zaman",correct:"tiempo"},{word:"zamir",correct:"pronombre"},{word:"zayıf",correct:"delgado/a, débil"},
     {word:"zengin",correct:"rico/a"},{word:"zeytin",correct:"aceituna"},{word:"zürafa",correct:"jirafa"},
     {word:"doktor",correct:"médico/a"},{word:"muhasebeci",correct:"contable"},{word:"aşçı",correct:"cocinero/a"},
-    {word:"mimar",correct:"architecto/a"},{word:"veteriner",correct:"veterinario/a"},{word:"diş hekimi",correct:"dentista"},
+    {word:"mimar",correct:"arquitecto/a"},{word:"veteriner",correct:"veterinario/a"},{word:"diş hekimi",correct:"dentista"},
     {word:"gazeteci",correct:"periodista"},{word:"şoför",correct:"conductor/a"},{word:"pilot",correct:"piloto/a"},
     {word:"işçi",correct:"trabajador/a"},{word:"elektrikçi",correct:"electricista"},{word:"yazar",correct:"escritor/a"},
     {word:"çiftçi",correct:"agricultor/a"},{word:"işletmeci",correct:"empresario/a"},{word:"satış temsilcisi",correct:"vendedor/a"},
@@ -203,7 +201,7 @@ const allWords = [
     {word:"bıçak",correct:"cuchillo"},{word:"su şişesi",correct:"botella de agua"}
 ];
 
-// 2. VARIABLES DE ESTADO
+// VARIABLES DE ESTADO
 let gameMode = 'tr-es';
 let currentRoundMode = 'tr-es';
 let score = 0;
@@ -215,27 +213,35 @@ let isMuted = false;
 
 const MASTERY_THRESHOLD = 5;
 
-// --- 3. FUNCIONES DE AUDIO ---
+// --- AUDIO Y BOTÓN MUTE ---
+function setupMuteButton() {
+    if (document.getElementById('mute-btn')) return;
+    const btn = document.createElement('button');
+    btn.id = 'mute-btn';
+    btn.innerHTML = '🔊';
+    btn.style.cssText = `position:fixed;top:20px;right:20px;z-index:9999;width:50px;height:50px;border-radius:50%;border:2px solid white;background:rgba(0,0,0,0.3);color:white;font-size:24px;cursor:pointer;display:flex;align-items:center;justify-content:center;`;
+    btn.onclick = (e) => {
+        e.stopPropagation();
+        isMuted = !isMuted;
+        btn.innerHTML = isMuted ? '🔇' : '🔊';
+        if (isMuted) window.speechSynthesis.cancel();
+    };
+    document.body.appendChild(btn);
+}
+
 function hablarTurco(texto) {
     if (isMuted) return;
     window.speechSynthesis.cancel();
-    
     const mensaje = new SpeechSynthesisUtterance(texto);
     mensaje.lang = 'tr-TR';
     mensaje.rate = 0.8;
-
     const voces = window.speechSynthesis.getVoices();
-    // Prioridad a la voz de Emel (común en Windows/Chrome)
-    const vozTurca = voces.find(v => v.name.includes('Emel')) || voces.find(v => v.lang.includes('tr')) || voces[0];
-    
+    const vozTurca = voces.find(v => v.lang.includes('tr')) || voces[0];
     if (vozTurca) mensaje.voice = vozTurca;
     window.speechSynthesis.speak(mensaje);
 }
 
-// Inicializar voces para el navegador
-window.speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices();
-
-// --- 4. FUNCIONES DE INTERFAZ ---
+// --- INTERFAZ ---
 function setMode(mode, event) {
     gameMode = mode;
     document.querySelectorAll('#mode-selector .primary-btn').forEach(btn => {
@@ -257,10 +263,7 @@ function resetAndStart() {
 function startGame() {
     document.getElementById('start-screen').style.display = 'none';
     document.getElementById('game-container').style.display = 'flex';
-    
-    // Desbloqueo de audio
     hablarTurco(""); 
-    
     initQueue();
     updateStats();
     loadQuestion();
@@ -281,9 +284,8 @@ function updateStats() {
     }
 }
 
-// --- 5. LÓGICA DE JUEGO ---
+// --- LÓGICA ---
 function initQueue() {
-    // Tomamos 25 palabras al azar que no hayan sido completadas
     activeQueue = [...allWords]
         .filter(w => (progress[w.word] || 0) < MASTERY_THRESHOLD)
         .sort(() => Math.random() - 0.5)
@@ -291,14 +293,9 @@ function initQueue() {
 }
 
 function loadQuestion() {
-    if (activeQueue.length === 0) {
-        initQueue(); // Recargar si se vacía
-    }
-
+    if (activeQueue.length === 0) initQueue();
     locked = false;
     current = activeQueue[Math.floor(Math.random() * activeQueue.length)];
-    
-    // Determinar modo de la ronda (si es Mixto)
     if (gameMode === 'mixed') {
         currentRoundMode = Math.random() > 0.5 ? 'tr-es' : 'es-tr';
     } else {
@@ -307,24 +304,16 @@ function loadQuestion() {
 
     const wordEl = document.getElementById("word");
     const optionsEl = document.getElementById("options");
-    const dotsEl = document.getElementById("dots");
-
-    // Mostrar palabra principal
     wordEl.textContent = (currentRoundMode === 'tr-es') ? current.word : current.correct;
     
-    // AUDIO: Suena al aparecer si es Turco -> Español
     if (currentRoundMode === 'tr-es') hablarTurco(current.word);
-
-    // Dibujar puntos de progreso (dots)
     renderDots(current.word);
 
-    // Generar opciones
     let correctText = (currentRoundMode === 'tr-es') ? current.correct : current.word;
     let opts = new Set([correctText]);
     while(opts.size < 4) {
         let r = allWords[Math.floor(Math.random() * allWords.length)];
-        let text = (currentRoundMode === 'tr-es') ? r.correct : r.word;
-        opts.add(text);
+        opts.add(currentRoundMode === 'tr-es' ? r.correct : r.word);
     }
 
     optionsEl.innerHTML = "";
@@ -332,22 +321,18 @@ function loadQuestion() {
         let btn = document.createElement("button");
         btn.className = "option";
         btn.textContent = opt;
-        btn.onclick = (e) => handleAnswer(opt, correctText, e.target);
+        btn.onclick = () => handleAnswer(opt, correctText);
         optionsEl.appendChild(btn);
     });
 }
 
-function handleAnswer(selected, correct, btn) {
+function handleAnswer(selected, correct) {
     if (locked) return;
     locked = true;
-
-    // AUDIO: Suena al responder si es Español -> Turco
     if (currentRoundMode === 'es-tr') hablarTurco(current.word);
-
     const isCorrect = (selected === correct);
     const wordKey = current.word;
 
-    // Marcar visualmente
     document.querySelectorAll(".option").forEach(b => {
         if (b.textContent === correct) b.style.backgroundColor = "#10b981";
         if (b.textContent === selected && !isCorrect) b.style.backgroundColor = "#ef4444";
@@ -365,7 +350,6 @@ function handleAnswer(selected, correct, btn) {
 
     updateStats();
     renderDots(wordKey);
-
     setTimeout(loadQuestion, 1000);
 }
 
@@ -381,9 +365,9 @@ function renderDots(wordKey) {
     }
 }
 
-// Iniciar al cargar
 window.onload = () => {
-    window.speechSynthesis.getVoices();
+    setupMuteButton();
     const btnDefault = document.querySelector('#mode-selector button');
     if (btnDefault) setMode('tr-es', { currentTarget: btnDefault });
 };
+window.speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices();
