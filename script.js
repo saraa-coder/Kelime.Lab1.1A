@@ -349,27 +349,43 @@ function handleAnswer(selected, correct) {
     if (locked) return;
     locked = true;
     if (currentRoundMode === 'es-tr') hablarTurco(current.word);
+    
     const isCorrect = (selected === correct);
     const wordKey = current.word;
-
-    document.querySelectorAll(".option").forEach(b => {
-        if (b.textContent === correct) b.style.backgroundColor = "#10b981";
-        if (b.textContent === selected && !isCorrect) b.style.backgroundColor = "#ef4444";
-    });
+    const wordEl = document.getElementById("word"); // Referencia a la palabra principal
 
     if (isCorrect) {
         progress[wordKey] = (progress[wordKey] || 0) + 1;
+        
+        // SI SE ALCANZA EL UMBRAL (5 ACERTADAS)
         if (progress[wordKey] >= MASTERY_THRESHOLD) {
             score++;
             activeQueue = activeQueue.filter(w => w.word !== wordKey);
+            
+            // Añadimos la clase de "maestría" a la palabra y a los botones
+            wordEl.classList.add("mastered");
+            document.querySelectorAll(".option").forEach(b => {
+                if (b.textContent === correct) b.classList.add("mastered-btn");
+            });
         }
     } else {
         if (progress[wordKey] > 0) progress[wordKey]--;
     }
 
+    // El código de colores original (verde/rojo) se mantiene
+    document.querySelectorAll(".option").forEach(b => {
+        if (b.textContent === correct) b.style.backgroundColor = "#10b981";
+        if (b.textContent === selected && !isCorrect) b.style.backgroundColor = "#ef4444";
+    });
+
     updateStats();
     renderDots(wordKey);
-    setTimeout(loadQuestion, 1250);
+
+    // IMPORTANTE: Limpiar las clases antes de cargar la siguiente pregunta
+    setTimeout(() => {
+        wordEl.classList.remove("mastered");
+        loadQuestion();
+    }, 1250);
 }
 
 function renderDots(wordKey) {
