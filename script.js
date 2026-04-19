@@ -382,10 +382,21 @@ function renderDots(wordKey) {
     const container = document.getElementById("dots");
     if (!container) return;
     container.innerHTML = "";
+    
     let val = progress[wordKey] || 0;
+
     for (let i = 0; i < MASTERY_THRESHOLD; i++) {
         let d = document.createElement("div");
-        d.className = "dot" + (i < val ? " active" : "");
+        d.className = "dot";
+        
+        if (i < val) {
+            // Si el progreso es 5, usamos la clase amarilla, si no, la verde (active)
+            if (val >= MASTERY_THRESHOLD) {
+                d.classList.add("mastered");
+            } else {
+                d.classList.add("active");
+            }
+        }
         container.appendChild(d);
     }
 }
