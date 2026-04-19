@@ -94,7 +94,7 @@ const allWords = [
     {word:"kantin",correct:"cantina"},{word:"kapalı",correct:"cerrado/a"},{word:"kapatmak",correct:"cerrar"},
     {word:"kapı",correct:"puerta"},{word:"kasap",correct:"carnicero/a, carnicería"},{word:"Kasım",correct:"noviembre"},
     {word:"kasiyer",correct:"cajero/a"},{word:"kat",correct:"piso, planta"},{word:"kebap",correct:"kebab"},
-    {word:"kedi",correct:"gato"},{word:"kel",correct:"calvo/a"},{word:"kestane",correct:"castaño/a"},
+    {word:"kedi",correct:"gato"},{word:"kel",correct:"calvo/a"},{word:"kestane",correct:"castaña"},
     {word:"kibar",correct:"amable"},{word:"kilo",correct:"kilo"},{word:"kira",correct:"alquiler"},
     {word:"kırmızı",correct:"rojo"},{word:"kış",correct:"invierno"},{word:"kısa saçlı",correct:"pelo corto"},
     {word:"kişi",correct:"persona"},{word:"kıskanç",correct:"celoso/a"},{word:"kitap",correct:"libro"},
