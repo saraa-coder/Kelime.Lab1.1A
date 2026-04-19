@@ -218,6 +218,7 @@ let current = null;
 let activeQueue = [];
 let locked = false;
 let isMuted = false;
+let lastWordKey = null; // Para evitar repeticiones seguidas
 
 const MASTERY_THRESHOLD = 5;
 
