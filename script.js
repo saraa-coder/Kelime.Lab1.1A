@@ -404,7 +404,7 @@ function handleAnswer(selected, correct) {
 
             // RELLENADO CON 5% PROBABILIDAD DE NÚMERO
             let nuevoElemento;
-            if (Math.random() < 0.05) { 
+            if (Math.random() < 0.1) { 
                 nuevoElemento = obtenerNumeroAleatorioTurco();
             } else {
                 let posibles = allWords.filter(w => !activeQueue.some(aq => aq.word === w.word));
