@@ -139,7 +139,7 @@ const allWords = [
     {word:"postacı",correct:"cartero/a"},{word:"projektör",correct:"proyector"},{word:"psikolog",correct:"psicólogo/a"},
     {word:"radyo",correct:"radio"},{word:"rengarenk",correct:"multicolor / de mil colores"},{word:"renk",correct:"color"},
     {word:"renkli",correct:"colorido/a"},{word:"resepsiyonist",correct:"recepcionista"},{word:"resim",correct:"cuadro / dibujo"},
-    {word:"restoran",correct:"restaurante"},{word:"Rica ederim",correct:"De nada"},{word:"rol",correct:"papel / rol"},
+    {word:"restoran",correct:"restaurante"},{word:"rica ederim",correct:"de nada"},{word:"rol",correct:"papel / rol"},
     {word:"roman",correct:"novela"},{word:"Rusya",correct:"Rusia"},{word:"saat",correct:"reloj / hora"},
     {word:"sabah",correct:"mañana"},{word:"sabahları",correct:"por las mañanas"},{word:"saç",correct:"cabello"},
     {word:"sağlıklı",correct:"saludable"},{word:"sakin",correct:"tranquilo/a"},{word:"Salı",correct:"martes"},
