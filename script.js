@@ -311,8 +311,21 @@ function initQueue() {
 function loadQuestion() {
     if (activeQueue.length === 0) initQueue();
     locked = false;
-    current = activeQueue[Math.floor(Math.random() * activeQueue.length)];
+
+    // --- LÓGICA ANTI-REPETICIÓN ---
+    let chosenWord;
+    if (activeQueue.length > 1) {
+        do {
+            chosenWord = activeQueue[Math.floor(Math.random() * activeQueue.length)];
+        } while (chosenWord.word === lastWordKey);
+    } else {
+        chosenWord = activeQueue[0];
+    }
     
+    current = chosenWord;
+    lastWordKey = current.word; // Guardamos para la siguiente ronda
+    // ------------------------------
+
     if (gameMode === 'mixed') {
         currentRoundMode = Math.random() > 0.5 ? 'tr-es' : 'es-tr';
     } else {
@@ -322,12 +335,13 @@ function loadQuestion() {
     const wordEl = document.getElementById("word");
     const optionsEl = document.getElementById("options");
 
-    // 1. LIMPIEZA: Quitamos el amarillo antes de mostrar la nueva palabra
+    // 1. LIMPIEZA
     wordEl.classList.remove("word-mastered");
+    wordEl.style.color = ""; // Limpieza extra por seguridad
 
     wordEl.textContent = (currentRoundMode === 'tr-es') ? current.word : current.correct;
     
-    // 2. ACTUALIZAR PUNTOS: Dibujamos los círculos de la nueva palabra
+    // 2. ACTUALIZAR PUNTOS
     renderDots(current.word);
 
     if (currentRoundMode === 'tr-es') {
@@ -336,12 +350,13 @@ function loadQuestion() {
         }, 500);
     }
 
-    // 3. LÓGICA DE OPCIONES (Asegúrate de tener esto después)
+    // 3. GENERAR OPCIONES (Asegúrate de que esta parte siga aquí abajo)
     let correctText = (currentRoundMode === 'tr-es') ? current.correct : current.word;
     let opts = new Set([correctText]);
     while(opts.size < 4) {
         let r = allWords[Math.floor(Math.random() * allWords.length)];
-        opts.add(currentRoundMode === 'tr-es' ? r.correct : r.word);
+        let candidate = (currentRoundMode === 'tr-es') ? r.correct : r.word;
+        opts.add(candidate);
     }
 
     optionsEl.innerHTML = "";
