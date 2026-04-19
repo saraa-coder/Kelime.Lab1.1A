@@ -197,7 +197,7 @@ const allWords = [
     {word:"Kurşun kalem",correct:"lápiz"},{word:"uzaktan kumanda",correct:"control remoto, mando"},
     {word:"diş fırçası",correct:"cepillo de dientes"},{word:"kredi kartı",correct:"tarjeta de crédito"},
     {word:"güneş gözlüğü",correct:"gafas de sol"},{word:"telefon şarjı",correct:"cargador del teléfono"},
-    {word:"fincan",correct:"taza"},{word:"kupa",correct:"taza / trofeo"},{word:"alışveriş çantası",correct:"bolsa de la compra"},
+    {word:"bir şey değil",correct:"de nada"},{word:"bir şey değil",correct:"de nada"},{word:"fincan",correct:"taza"},{word:"kupa",correct:"taza / trofeo"},{word:"alışveriş çantası",correct:"bolsa de la compra"},
     {word:"bıçak",correct:"cuchillo"},{word:"su şişesi",correct:"botella de agua"},{word:"iyi uykular",correct:"que duermas bien"},{word:"tatlı rüyalar",correct:"dulces sueños"},{word:"rüya",correct:"sueño (CAT somni)"},{word:"uyku",correct:"sueño (CAT son)"}
 
 ];
