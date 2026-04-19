@@ -198,6 +198,7 @@ const allWords = [
     {word:"diş fırçası",correct:"cepillo de dientes"},{word:"kredi kartı",correct:"tarjeta de crédito"},
     {word:"güneş gözlüğü",correct:"gafas de sol"},{word:"telefon şarjı",correct:"cargador del teléfono"},
     {word:"nikah",correct:"boda (ceremonia legal)"},{word:"karşılaşma",correct:"encuentro"},{word:"sene",correct:"año"},
+    {word:"şamdan",correct:"candelabro"},{word:"takvim",correct:"calendario"},{word:"üzüm",correct:"uva"},{word:"valiz",correct:"maleta"},
     {word:"ünlü",correct:"vocal (Gram.) / famoso/a"},{word:"ünsüz",correct:"consonante (Gram.)"},
     {word:"keman",correct:"violín"},{word:"nargile",correct:"cachimba"},{word:"peynir",correct:"queso"},
     {word:"çaydanlık",correct:"tetera turca"},{word:"gemi",correct:"barco"},{word:"ışık",correct:"luz"},
