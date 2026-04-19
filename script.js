@@ -378,20 +378,23 @@ function handleAnswer(selected, correct) {
 function renderDots(wordKey) {
     const container = document.getElementById("dots");
     if (!container) return;
+
     container.innerHTML = "";
+
     let val = progress[wordKey] || 0;
 
-const wordEl = document.getElementById("word");
-if (val >= MASTERY_THRESHOLD) {
-    wordEl.style.color = "yellow";
-} else {
-    wordEl.style.color = "";
-}
+    const wordEl = document.getElementById("word");
+    if (val >= MASTERY_THRESHOLD) {
+        wordEl.style.color = "yellow";
+    } else {
+        wordEl.style.color = "";
+    }
 
-for (let i = 0; i < MASTERY_THRESHOLD; i++) {
-    let d = document.createElement("div");
-    d.className = "dot" + (i < val ? " active" : "");
-    container.appendChild(d);
+    for (let i = 0; i < MASTERY_THRESHOLD; i++) {
+        let d = document.createElement("div");
+        d.className = "dot" + (i < val ? " active" : "");
+        container.appendChild(d);
+    }
 }
 
 window.onload = () => {
