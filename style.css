@@ -9,6 +9,7 @@
     --text: #f8fafc;
     --correct: #22c55e;
     --wrong: #ef4444;
+    --mastery: #fde047; /* Amarillo para maestría */
 }
 
 * {
@@ -107,13 +108,16 @@ h1 {
     margin: 2rem 0;
     min-height: 100px;
     display: flex;
+    justify-content: center;
     align-items: center;
     transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
+/* Efecto maestría en palabra */
 .word-mastered {
-    color: #fde047;
-    text-shadow: 0 0 20px rgba(253, 224, 71, 0.5);
+    color: var(--mastery) !important;
+    text-shadow: 0 0 20px rgba(253, 224, 71, 0.6);
+    transform: scale(1.05);
 }
 
 /* OPCIONES */
@@ -173,12 +177,14 @@ h1 {
     box-shadow: 0 0 8px var(--turco);
 }
 
+/* Efecto maestría en círculos */
 .dot.mastered {
-    background: #fde047;
+    background: var(--mastery) !important;
+    box-shadow: 0 0 12px var(--mastery) !important;
     transform: scale(1.2);
 }
 
-/* ESTADO DE BLOQUEO (CUANDO ACIERTAS) */
+/* ESTADO DE BLOQUEO */
 .has-mastered .option {
     opacity: 0.4;
     pointer-events: none;
@@ -189,27 +195,4 @@ h1 {
     #word { font-size: 1.8rem; }
     .option { padding: 1.2rem 0.3rem; font-size: 0.85rem; }
     #options { gap: 0.75rem; }
-}
-/* --- EFECTOS DE MAESTRÍA (5 ACIERTOS) --- */
-
-/* Clase para la palabra principal */
-.word-mastered {
-    color: #fde047 !important; /* Amarillo brillante */
-    text-shadow: 0 0 25px rgba(253, 224, 71, 0.7);
-    transform: scale(1.1);
-}
-
-/* Clase para el botón que acabas de pulsar */
-.option-mastered {
-    background-color: #fde047 !important; /* Fondo amarillo */
-    color: #0f172a !important; /* Texto oscuro para que contraste */
-    box-shadow: 0 0 20px rgba(253, 224, 71, 0.5);
-    border-color: white !important;
-    font-weight: 800 !important;
-}
-
-/* Opcional: animar los dots cuando llegan al máximo */
-.dot.active.mastered {
-    background: #fde047;
-    box-shadow: 0 0 12px #fde047;
 }
