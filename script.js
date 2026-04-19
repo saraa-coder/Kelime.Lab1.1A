@@ -368,11 +368,17 @@ function loadQuestion() {
 
     let correctText = (currentRoundMode === 'tr-es') ? current.correct : current.word;
     let opts = new Set([correctText]);
-    while(opts.size < 4) {
-        let r = allWords[Math.floor(Math.random() * allWords.length)];
-        let candidate = (currentRoundMode === 'tr-es') ? r.correct : r.word;
+   while (opts.size < 4) {
+    let r = allWords[Math.floor(Math.random() * allWords.length)];
+
+    if (!r || !r.word || !r.correct) continue; // 🔥 evita datos rotos
+
+    let candidate = (currentRoundMode === 'tr-es') ? r.correct : r.word;
+
+    if (candidate && candidate !== "") {
         opts.add(candidate);
     }
+}
 
     optionsEl.innerHTML = "";
     [...opts].sort(() => Math.random() - 0.5).forEach(opt => {
