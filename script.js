@@ -321,6 +321,9 @@ function loadQuestion() {
     const optionsEl = document.getElementById("options");
     wordEl.textContent = (currentRoundMode === 'tr-es') ? current.word : current.correct;
     
+    if ((progress[current.word] || 0) >= 5) wordEl.style.color = "yellow";
+else wordEl.style.color = "";
+    
     if (currentRoundMode === 'tr-es') {
     setTimeout(() => {
         hablarTurco(current.word);
