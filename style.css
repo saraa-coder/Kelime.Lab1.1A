@@ -190,3 +190,26 @@ h1 {
     .option { padding: 1.2rem 0.3rem; font-size: 0.85rem; }
     #options { gap: 0.75rem; }
 }
+/* --- EFECTOS DE MAESTRÍA (5 ACIERTOS) --- */
+
+/* Clase para la palabra principal */
+.word-mastered {
+    color: #fde047 !important; /* Amarillo brillante */
+    text-shadow: 0 0 25px rgba(253, 224, 71, 0.7);
+    transform: scale(1.1);
+}
+
+/* Clase para el botón que acabas de pulsar */
+.option-mastered {
+    background-color: #fde047 !important; /* Fondo amarillo */
+    color: #0f172a !important; /* Texto oscuro para que contraste */
+    box-shadow: 0 0 20px rgba(253, 224, 71, 0.5);
+    border-color: white !important;
+    font-weight: 800 !important;
+}
+
+/* Opcional: animar los dots cuando llegan al máximo */
+.dot.active.mastered {
+    background: #fde047;
+    box-shadow: 0 0 12px #fde047;
+}
