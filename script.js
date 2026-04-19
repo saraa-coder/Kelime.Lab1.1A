@@ -213,7 +213,7 @@ const allWords = [
 let gameMode = 'tr-es';
 let currentRoundMode = 'tr-es';
 let score = 0;
-let masteryCounter = 0; // <--- Añade esto
+let masteryCounter = 0;
 let progress = {};
 let current = null;
 let activeQueue = [];
@@ -389,6 +389,8 @@ function loadQuestion() {
 function handleAnswer(selected, correct) {
     if (locked) return;
     locked = true;
+
+    // Audio solo en turco
     if (currentRoundMode === 'es-tr') hablarTurco(current.word);
     
     const isCorrect = (selected === correct);
@@ -398,31 +400,38 @@ function handleAnswer(selected, correct) {
     if (isCorrect) {
         progress[wordKey] = (progress[wordKey] || 0) + 1;
         
-       if (progress[wordKey] >= MASTERY_THRESHOLD) {
+        if (progress[wordKey] >= MASTERY_THRESHOLD) {
             score++;
-            masteryCounter++; // Sumamos uno cada vez que una palabra llega a amarillo
+            masteryCounter++; 
             wordEl.classList.add("word-mastered");
+
+            // Sacamos la palabra dominada
             activeQueue = activeQueue.filter(w => w.word !== wordKey);
 
             let nuevoElemento;
-            
-            // Si el contador es múltiplo de 3, entra un número
-            if (masteryCounter % 3 === 0) { 
+            // Cada 5 palabras dominadas, entra un número
+            if (masteryCounter % 5 === 0) { 
                 nuevoElemento = obtenerNumeroAleatorioTurco();
-                allWords.push(nuevoElemento); // Lo registramos para que aparezcan distractores
+                // Lo añadimos a la lista para que el juego pueda crear opciones falsas con él
+                allWords.push(nuevoElemento);
             } else {
                 let posibles = allWords.filter(w => !activeQueue.some(aq => aq.word === w.word));
-                nuevoElemento = posibles[Math.floor(Math.random() * posibles.length)];
+                if (posibles.length > 0) {
+                    nuevoElemento = posibles[Math.floor(Math.random() * posibles.length)];
+                }
             }
             
-            if (nuevoElemento) activeQueue.push(nuevoElemento);
-        }
+            if (nuevoElemento) {
+                activeQueue.push(nuevoElemento);
+            }
         }
     } else {
         if (progress[wordKey] > 0) progress[wordKey]--;
     }
 
-    document.querySelectorAll(".option").forEach(b => {
+    // Feedback visual
+    const buttons = document.querySelectorAll(".option");
+    buttons.forEach(b => {
         if (b.textContent === correct) b.style.backgroundColor = "#10b981";
         if (b.textContent === selected && !isCorrect) b.style.backgroundColor = "#ef4444";
     });
