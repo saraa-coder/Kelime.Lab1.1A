@@ -9,7 +9,6 @@
     --text: #f8fafc;
     --correct: #22c55e;
     --wrong: #ef4444;
-    --mastery: #fde047; /* Amarillo para maestría */
 }
 
 * {
@@ -110,14 +109,13 @@ h1 {
     display: flex;
     justify-content: center;
     align-items: center;
-    transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transition: 0.3s;
 }
 
-/* Efecto maestría en palabra */
+/* Palabra en amarillo al llegar a 5 */
 .word-mastered {
-    color: var(--mastery) !important;
-    text-shadow: 0 0 20px rgba(253, 224, 71, 0.6);
-    transform: scale(1.05);
+    color: #fde047;
+    text-shadow: 0 0 20px rgba(253, 224, 71, 0.5);
 }
 
 /* OPCIONES */
@@ -177,11 +175,10 @@ h1 {
     box-shadow: 0 0 8px var(--turco);
 }
 
-/* Efecto maestría en círculos */
+/* Puntos en amarillo al llegar a 5 */
 .dot.mastered {
-    background: var(--mastery) !important;
-    box-shadow: 0 0 12px var(--mastery) !important;
-    transform: scale(1.2);
+    background: #fde047;
+    box-shadow: 0 0 8px #fde047;
 }
 
 /* ESTADO DE BLOQUEO */
