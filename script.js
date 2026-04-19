@@ -46,7 +46,7 @@ const allWords = [
     {word:"dışarı",correct:"afuera"},{word:"dizi",correct:"serie"},{word:"doğum günü",correct:"cumpleaños"},
     {word:"doğum tarihi",correct:"fecha nacimiento"},{word:"dolap",correct:"armario"},{word:"dolaşmak",correct:"pasear"},
     {word:"dolu",correct:"lleno/a"},{word:"domates",correct:"tomate"},{word:"dönmek",correct:"volver"},
-    {word:"dosya",correct:"archivo"},{word:"düğün",correct:"boda"},{word:"durak",correct:"parada"},
+    {word:"dosya",correct:"archivo"},{word:"düğün",correct:"boda (celebración)"},{word:"durak",correct:"parada"},
     {word:"durmak",correct:"parar"},{word:"duş almak",correct:"ducharse"},{word:"duvar",correct:"pared"},
     {word:"düz saçlı",correct:"pelo liso"},{word:"düzenli",correct:"ordenado/a"},{word:"eczacı",correct:"farmacéutico/a"},
     {word:"eczane",correct:"farmacia"},{word:"eğlenceli",correct:"divertido/a"},{word:"Ekim",correct:"octubre"},
