@@ -233,9 +233,9 @@ const allWords = [
 
     // evitar duplicados por si acaso
     numeros.forEach(n => {
-        if (!allWords.some(w => w.word === n.word)) {
-            allWords.push(n);
-        }
+       if (!allWords.some(w => w.word === n.word && w.correct === n.correct)) {
+    allWords.push(n);
+}
     });
 })();
 
