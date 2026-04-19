@@ -1,6 +1,15 @@
 /**
- * KELIME LAB 1.1 - LISTA OFICIAL COMPLETA
+ * KELIME LAB 1.1 - LISTA OFICIAL COMPLETA (FIXED)
  */
+
+// ===============================
+// BASE DE NÚMEROS (MOVIDO ARRIBA)
+// ===============================
+const numBase = {
+    0:"sıfır", 1:"bir", 2:"iki", 3:"üç", 4:"dört", 5:"beş", 6:"altı", 7:"yedi", 8:"sekiz", 9:"dokuz",
+    10:"on", 20:"yirmi", 30:"otuz", 40:"kırk", 50:"elli", 60:"altmış", 70:"yetmiş", 80:"seksen", 90:"doksan",
+    100:"yüz", 1000:"bin", 1000000:"milyon"
+};
 
 const allWords = [
     {word:"aç",correct:"hambriento/a"},{word:"açık",correct:"abierto / claro (color)"},{word:"açmak",correct:"abrir"},
@@ -209,21 +218,22 @@ const allWords = [
 
 ];
 // ===============================
-// AÑADIR NÚMEROS AL VOCABULARIO BASE
+// AÑADIR NÚMEROS
 // ===============================
 (function añadirNumerosAlVocabulario() {
     const numeros = [];
 
     for (let i = 0; i <= 100; i++) {
         let texto;
-        if (numBase[i]) {
+
+        if (numBase[i] !== undefined) {
             texto = numBase[i];
         } else {
-            texto = numBase[Math.floor(i / 10) * 10] + " " + numBase[i % 10];
+            texto = (numBase[Math.floor(i / 10) * 10] || "") + " " + (numBase[i % 10] || "");
         }
 
         numeros.push({
-            word: texto,
+            word: texto.trim(),
             correct: i.toString()
         });
     }
@@ -231,69 +241,84 @@ const allWords = [
     numeros.push({ word: "bin", correct: "1.000" });
     numeros.push({ word: "bir milyon", correct: "1.000.000" });
 
-    // evitar duplicados por si acaso
     numeros.forEach(n => {
-       if (!allWords.some(w => w.word === n.word && w.correct === n.correct)) {
-    allWords.push(n);
-}
+        if (!allWords.some(w => w.word === n.word && w.correct === n.correct)) {
+            allWords.push(n);
+        }
     });
 })();
 
+// ===============================
 // VARIABLES DE ESTADO
+// ===============================
 let gameMode = 'tr-es';
 let currentRoundMode = 'tr-es';
 let score = 0;
-let masteryCounter = 0; // Controla la aparición de números
+let masteryCounter = 0;
 let progress = {};
 let current = null;
 let activeQueue = [];
 let locked = false;
 let isMuted = false;
-let lastWordKey = null; 
+let lastWordKey = null;
 
 const MASTERY_THRESHOLD = 5;
 
-// --- BASE DE DATOS DE NÚMEROS Y GENERADOR ---
-const numBase = {
-    0:"sıfır", 1:"bir", 2:"iki", 3:"üç", 4:"dört", 5:"beş", 6:"altı", 7:"yedi", 8:"sekiz", 9:"dokuz",
-    10:"on", 20:"yirmi", 30:"otuz", 40:"kırk", 50:"elli", 60:"altmış", 70:"yetmiş", 80:"seksen", 90:"doksan",
-    100:"yüz", 1000:"bin", 1000000:"milyon"
-};
-
+// ===============================
+// NUMEROS RANDOM TURCO
+// ===============================
 function obtenerNumeroAleatorioTurco() {
     const especiales = [100, 1000, 1000000];
-    let n = Math.random() < 0.2 ? especiales[Math.floor(Math.random() * especiales.length)] : Math.floor(Math.random() * 101);
-    let textoTurco = "";
+    let n = Math.random() < 0.2
+        ? especiales[Math.floor(Math.random() * especiales.length)]
+        : Math.floor(Math.random() * 101);
+
+    let textoTurco;
+
     if (numBase[n]) {
         textoTurco = numBase[n];
     } else {
-        textoTurco = numBase[Math.floor(n / 10) * 10] + " " + numBase[n % 10];
+        textoTurco =
+            (numBase[Math.floor(n / 10) * 10] || "") +
+            " " +
+            (numBase[n % 10] || "");
     }
-    let numeroFormateado = n.toString(); 
-    return { word: textoTurco, correct: numeroFormateado };
+
+    return {
+        word: textoTurco.trim(),
+        correct: n.toString()
+    };
 }
 
-// --- AUDIO ---
+// ===============================
+// AUDIO
+// ===============================
 function hablarTurco(texto) {
     if (isMuted || !texto) return;
+
     window.speechSynthesis.cancel();
-    const mensaje = new SpeechSynthesisUtterance(texto);
-    mensaje.lang = 'tr-TR';
-    mensaje.rate = 0.7;
-    const voces = window.speechSynthesis.getVoices();
-    const vozTurca = voces.find(v => v.lang.includes('tr')) || voces[0];
-    if (vozTurca) mensaje.voice = vozTurca;
-    window.speechSynthesis.speak(mensaje);
+    const msg = new SpeechSynthesisUtterance(texto);
+    msg.lang = 'tr-TR';
+    msg.rate = 0.7;
+
+    const voices = window.speechSynthesis.getVoices();
+    msg.voice = voices.find(v => v.lang.includes('tr')) || voices[0];
+
+    window.speechSynthesis.speak(msg);
 }
 
-// --- INTERFAZ ---
+// ===============================
+// INTERFAZ
+// ===============================
 function setMode(mode, event) {
     gameMode = mode;
+
     document.querySelectorAll('#mode-selector .primary-btn').forEach(btn => {
         btn.style.border = "none";
         btn.style.opacity = "0.6";
     });
-    if (event && event.currentTarget) {
+
+    if (event?.currentTarget) {
         event.currentTarget.style.border = "3px solid white";
         event.currentTarget.style.opacity = "1";
     }
@@ -310,6 +335,7 @@ function resetAndStart() {
 function startGame() {
     document.getElementById('start-screen').style.display = 'none';
     document.getElementById('game-container').style.display = 'flex';
+
     initQueue();
     updateStats();
     loadQuestion();
@@ -318,22 +344,16 @@ function startGame() {
 function showMenu() {
     document.getElementById('game-container').style.display = 'none';
     document.getElementById('start-screen').style.display = 'block';
-    const resumeBtn = document.getElementById('resume-button');
+
+    const btn = document.getElementById('resume-button');
     if (score > 0 || Object.keys(progress).length > 0) {
-        resumeBtn.style.display = 'block';
+        btn.style.display = 'block';
     }
 }
 
-function updateStats() {
-    const scoreEl = document.getElementById("score");
-    const percentEl = document.getElementById("percent");
-    if (scoreEl) scoreEl.textContent = score + " tamamlanan";
-    if (percentEl && typeof allWords !== 'undefined') {
-        let p = Math.round((score / allWords.length) * 100);
-        percentEl.textContent = "%" + p;
-    }
-}
-
+// ===============================
+// COLA
+// ===============================
 function initQueue() {
     activeQueue = [...allWords]
         .filter(w => (progress[w.word] || 0) < MASTERY_THRESHOLD)
@@ -341,81 +361,90 @@ function initQueue() {
         .slice(0, 25);
 }
 
+// ===============================
+// PREGUNTAS
+// ===============================
 function loadQuestion() {
     if (activeQueue.length === 0) initQueue();
+
     locked = false;
 
-    let chosenWord = activeQueue.length > 1 
-        ? activeQueue.find(w => w.word !== lastWordKey) || activeQueue[0]
-        : activeQueue[0];
-    
-    current = chosenWord;
+    const chosen = activeQueue.find(w => w.word !== lastWordKey) || activeQueue[0];
+
+    current = chosen;
     lastWordKey = current.word;
 
-    currentRoundMode = gameMode === 'mixed' ? (Math.random() > 0.5 ? 'tr-es' : 'es-tr') : gameMode;
+    currentRoundMode = gameMode === 'mixed'
+        ? (Math.random() > 0.5 ? 'tr-es' : 'es-tr')
+        : gameMode;
 
     const wordEl = document.getElementById("word");
     const optionsEl = document.getElementById("options");
 
-    wordEl.classList.remove("word-mastered");
-    wordEl.textContent = (currentRoundMode === 'tr-es') ? current.word : current.correct;
-    
-    renderDots(current.word);
+    wordEl.textContent =
+        currentRoundMode === 'tr-es' ? current.word : current.correct;
+
+    let correctText =
+        currentRoundMode === 'tr-es' ? current.correct : current.word;
+
+    const opts = new Set([correctText]);
+
+    while (opts.size < 4) {
+        let r = allWords[Math.floor(Math.random() * allWords.length)];
+        if (!r?.word || !r?.correct) continue;
+
+        opts.add(
+            currentRoundMode === 'tr-es' ? r.correct : r.word
+        );
+    }
+
+    // 🔥 FIX IMPORTANTE
+    optionsEl.innerHTML = "";
+
+    Array.from(opts)
+        .sort(() => Math.random() - 0.5)
+        .forEach(opt => {
+            const btn = document.createElement("button");
+            btn.className = "option";
+            btn.textContent = opt;
+
+            btn.onclick = () => handleAnswer(opt, correctText);
+
+            optionsEl.appendChild(btn);
+        });
 
     if (currentRoundMode === 'tr-es') {
-        setTimeout(() => hablarTurco(current.word), 500);
+        setTimeout(() => hablarTurco(current.word), 400);
     }
 
-    let correctText = (currentRoundMode === 'tr-es') ? current.correct : current.word;
-    let opts = new Set([correctText]);
-   while (opts.size < 4) {
-    let r = allWords[Math.floor(Math.random() * allWords.length)];
-
-    if (!r || !r.word || !r.correct) continue; // 🔥 evita datos rotos
-
-    let candidate = (currentRoundMode === 'tr-es') ? r.correct : r.word;
-
-    if (candidate && candidate !== "") {
-        opts.add(candidate);
-    }
+    renderDots(current.word);
 }
 
-    optionsEl.innerHTML = "";
-    opcionesFinales.sort(() => Math.random() - 0.5).forEach(opt => {
-        let btn = document.createElement("button");
-        btn.className = "option";
-        btn.textContent = opt;
-        btn.onclick = () => handleAnswer(opt, correctText);
-        optionsEl.appendChild(btn);
-    });
-}
-
+// ===============================
+// RESPUESTA
+// ===============================
 function handleAnswer(selected, correct) {
     if (locked) return;
     locked = true;
-    
-    if (currentRoundMode === 'es-tr') hablarTurco(current.word);
-    
-    const isCorrect = (selected === correct);
+
     const wordKey = current.word;
+
+    const isCorrect = selected === correct;
 
     if (isCorrect) {
         progress[wordKey] = (progress[wordKey] || 0) + 1;
+
         if (progress[wordKey] >= MASTERY_THRESHOLD) {
             score++;
             masteryCounter++;
-            document.getElementById("word").classList.add("word-mastered");
+
             activeQueue = activeQueue.filter(w => w.word !== wordKey);
 
-            let nuevo;
-            // Cada 3 maestrías entra un número
-            if (masteryCounter % 3 === 0) {
-                nuevo = obtenerNumeroAleatorioTurco();
-                allWords.push(nuevo);
-            } else {
-                let posibles = allWords.filter(w => !activeQueue.some(aq => aq.word === w.word));
-                nuevo = posibles[Math.floor(Math.random() * posibles.length)];
-            }
+            let nuevo =
+                masteryCounter % 3 === 0
+                    ? obtenerNumeroAleatorioTurco()
+                    : allWords[Math.floor(Math.random() * allWords.length)];
+
             if (nuevo) activeQueue.push(nuevo);
         }
     } else {
@@ -428,25 +457,43 @@ function handleAnswer(selected, correct) {
     });
 
     updateStats();
-    renderDots(wordKey); 
-    setTimeout(loadQuestion, 1250);
+    renderDots(wordKey);
+
+    setTimeout(loadQuestion, 1200);
 }
 
+// ===============================
+// PROGRESO
+// ===============================
 function renderDots(wordKey) {
     const container = document.getElementById("dots");
     if (!container) return;
+
     container.innerHTML = "";
+
     let val = progress[wordKey] || 0;
+
     for (let i = 0; i < MASTERY_THRESHOLD; i++) {
-        let d = document.createElement("div");
-        d.className = "dot" + (i < val ? (val >= MASTERY_THRESHOLD ? " mastered" : " active") : "");
+        const d = document.createElement("div");
+        d.className = "dot" + (i < val ? " active" : "");
         container.appendChild(d);
     }
 }
 
-// Inicialización corregida para móviles
+// ===============================
+// STATS
+// ===============================
+function updateStats() {
+    document.getElementById("score").textContent = score + " completados";
+
+    let p = Math.round((score / allWords.length) * 100);
+    document.getElementById("percent").textContent = "%" + p;
+}
+
+// ===============================
+// INIT
+// ===============================
 window.onload = () => {
-    if (typeof setupMuteButton === 'function') setupMuteButton();
     const btnDefault = document.querySelector('#mode-selector button');
     if (btnDefault) setMode('tr-es', { currentTarget: btnDefault });
 };
