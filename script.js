@@ -199,6 +199,7 @@ const allWords = [
     {word:"güneş gözlüğü",correct:"gafas de sol"},{word:"telefon şarjı",correct:"cargador del teléfono"},
     {word:"nikah",correct:"boda (ceremonia legal)"},{word:"karşılaşma",correct:"encuentro"},{word:"sene",correct:"año"},
     {word:"ünlü",correct:"vocal (Gram.) / famoso/a"},{word:"ünsüz",correct:"consonante (Gram.)"},
+    {word:"sıralamak",correct:"ordenar, enumerar"},{word:"selamlaşma",correct:"saludo"},{word:"ayrılma",correct:"separación, despedida"},
     {word:"ne demek",correct:"de nada"},{word:"karşılaşma",correct:"encuentro"},{word:"bir şey değil",correct:"de nada"},{word:"rica etmek",correct:"pedir"},{word:"fincan",correct:"taza"},{word:"kupa",correct:"taza / trofeo"},{word:"alışveriş çantası",correct:"bolsa de la compra"},
     {word:"bıçak",correct:"cuchillo"},{word:"su şişesi",correct:"botella de agua"},{word:"iyi uykular",correct:"que duermas bien"},{word:"tatlı rüyalar",correct:"dulces sueños"},{word:"rüya",correct:"sueño (CAT somni)"},{word:"uyku",correct:"sueño (CAT son)"}
 
