@@ -116,7 +116,7 @@ const allWords = [
     {word:"Mayıs",correct:"mayo"},{word:"memur",correct:"funcionario/a"},{word:"merdiven",correct:"escalera"},
     {word:"Merhaba",correct:"Hola"},{word:"meşgul",correct:"ocupado/a"},{word:"metro",correct:"metro"},
     {word:"mevsimler",correct:"estaciones del año"},{word:"millet",correct:"nación"},{word:"misal",correct:"ejemplo"},
-    {word:"mor",correct:"morado"},{word:"mp3 çalar",correct:"reproductor mp3"},{word:"mühendis",correct:"ingeniero/a"},
+    {word:"mor",correct:"morado"},{word:"müzik çalar",correct:"reproductor de música"},{word:"mühendis",correct:"ingeniero/a"},
     {word:"müsait",correct:"disponible"},{word:"mutfak",correct:"cocina"},{word:"mutlu",correct:"feliz"},
     {word:"mutsuz",correct:"infeliz / triste"},{word:"nar",correct:"granada (fruta)"},{word:"nefes",correct:"respiración"},
     {word:"nefret etmek",correct:"odiar"},{word:"nerede",correct:"dónde"},{word:"nesne",correct:"objeto"},
