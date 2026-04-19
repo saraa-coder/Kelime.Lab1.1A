@@ -224,7 +224,7 @@ const allWords = [
 
         numeros.push({
             word: texto,
-            correct: i.toLocaleString('de-DE')
+            correct: i.toString()
         });
     }
 
@@ -269,7 +269,7 @@ function obtenerNumeroAleatorioTurco() {
     } else {
         textoTurco = numBase[Math.floor(n / 10) * 10] + " " + numBase[n % 10];
     }
-    let numeroFormateado = n.toLocaleString('de-DE'); 
+    let numeroFormateado = n.toString(); 
     return { word: textoTurco, correct: numeroFormateado };
 }
 
