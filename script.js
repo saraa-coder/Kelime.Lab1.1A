@@ -213,6 +213,7 @@ const allWords = [
 let gameMode = 'tr-es';
 let currentRoundMode = 'tr-es';
 let score = 0;
+let masteryCounter = 0; // <--- Añade esto
 let progress = {};
 let current = null;
 let activeQueue = [];
@@ -397,20 +398,25 @@ function handleAnswer(selected, correct) {
     if (isCorrect) {
         progress[wordKey] = (progress[wordKey] || 0) + 1;
         
-        if (progress[wordKey] >= MASTERY_THRESHOLD) {
+       if (progress[wordKey] >= MASTERY_THRESHOLD) {
             score++;
+            masteryCounter++; // Sumamos uno cada vez que una palabra llega a amarillo
             wordEl.classList.add("word-mastered");
             activeQueue = activeQueue.filter(w => w.word !== wordKey);
 
-            // RELLENADO CON 5% PROBABILIDAD DE NÚMERO
             let nuevoElemento;
-            if (Math.random() < 0.3) { 
+            
+            // Si el contador es múltiplo de 3, entra un número
+            if (masteryCounter % 3 === 0) { 
                 nuevoElemento = obtenerNumeroAleatorioTurco();
+                allWords.push(nuevoElemento); // Lo registramos para que aparezcan distractores
             } else {
                 let posibles = allWords.filter(w => !activeQueue.some(aq => aq.word === w.word));
                 nuevoElemento = posibles[Math.floor(Math.random() * posibles.length)];
             }
+            
             if (nuevoElemento) activeQueue.push(nuevoElemento);
+        }
         }
     } else {
         if (progress[wordKey] > 0) progress[wordKey]--;
