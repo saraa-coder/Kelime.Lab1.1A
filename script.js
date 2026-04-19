@@ -208,6 +208,36 @@ const allWords = [
     {word:"bıçak",correct:"cuchillo"},{word:"su şişesi",correct:"botella de agua"},{word:"iyi uykular",correct:"que duermas bien"},{word:"tatlı rüyalar",correct:"dulces sueños"},{word:"rüya",correct:"sueño (CAT somni)"},{word:"uyku",correct:"sueño (CAT son)"}
 
 ];
+// ===============================
+// AÑADIR NÚMEROS AL VOCABULARIO BASE
+// ===============================
+(function añadirNumerosAlVocabulario() {
+    const numeros = [];
+
+    for (let i = 0; i <= 100; i++) {
+        let texto;
+        if (numBase[i]) {
+            texto = numBase[i];
+        } else {
+            texto = numBase[Math.floor(i / 10) * 10] + " " + numBase[i % 10];
+        }
+
+        numeros.push({
+            word: texto,
+            correct: i.toLocaleString('de-DE')
+        });
+    }
+
+    numeros.push({ word: "bin", correct: "1.000" });
+    numeros.push({ word: "bir milyon", correct: "1.000.000" });
+
+    // evitar duplicados por si acaso
+    numeros.forEach(n => {
+        if (!allWords.some(w => w.word === n.word)) {
+            allWords.push(n);
+        }
+    });
+})();
 
 // VARIABLES DE ESTADO
 let gameMode = 'tr-es';
