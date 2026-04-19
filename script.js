@@ -381,7 +381,7 @@ function loadQuestion() {
 }
 
     optionsEl.innerHTML = "";
-    [...opts].sort(() => Math.random() - 0.5).forEach(opt => {
+    opcionesFinales.sort(() => Math.random() - 0.5).forEach(opt => {
         let btn = document.createElement("button");
         btn.className = "option";
         btn.textContent = opt;
