@@ -218,9 +218,32 @@ let current = null;
 let activeQueue = [];
 let locked = false;
 let isMuted = false;
-let lastWordKey = null; // Para evitar repeticiones seguidas
+let lastWordKey = null; 
 
 const MASTERY_THRESHOLD = 5;
+
+// --- BASE DE DATOS DE NÚMEROS Y GENERADOR ---
+const numBase = {
+    0:"sıfır", 1:"bir", 2:"iki", 3:"üç", 4:"dört", 5:"beş", 6:"altı", 7:"yedi", 8:"sekiz", 9:"dokuz",
+    10:"on", 20:"yirmi", 30:"otuz", 40:"kırk", 50:"elli", 60:"altmış", 70:"yetmiş", 80:"seksen", 90:"doksan",
+    100:"yüz", 1000:"bin", 1000000:"milyon"
+};
+
+function obtenerNumeroAleatorioTurco() {
+    const especiales = [100, 1000, 1000000];
+    let n = Math.random() < 0.2 ? especiales[Math.floor(Math.random() * especiales.length)] : Math.floor(Math.random() * 101);
+    
+    let textoTurco = "";
+    if (numBase[n]) {
+        textoTurco = numBase[n];
+    } else {
+        textoTurco = numBase[Math.floor(n / 10) * 10] + " " + numBase[n % 10];
+    }
+    
+    // Formato con puntos para 1.000 y 1.000.000
+    let numeroFormateado = n.toLocaleString('de-DE'); 
+    return { word: textoTurco, correct: numeroFormateado };
+}
 
 // --- AUDIO Y BOTÓN MUTE ---
 function setupMuteButton() {
@@ -266,10 +289,10 @@ function setMode(mode, event) {
 function resetAndStart() {
     score = 0;
     progress = {};
-    // Añade esta línea para que el botón de continuar desaparezca al reiniciar
     document.getElementById('resume-button').style.display = 'none';
     startGame();
 }
+
 function startGame() {
     document.getElementById('start-screen').style.display = 'none';
     document.getElementById('game-container').style.display = 'flex';
@@ -282,8 +305,6 @@ function startGame() {
 function showMenu() {
     document.getElementById('game-container').style.display = 'none';
     document.getElementById('start-screen').style.display = 'block';
-    
-    // Esto es lo que falta:
     const resumeBtn = document.getElementById('resume-button');
     if (score > 0 || Object.keys(progress).length > 0) {
         resumeBtn.style.display = 'block';
@@ -312,7 +333,6 @@ function loadQuestion() {
     if (activeQueue.length === 0) initQueue();
     locked = false;
 
-    // --- LÓGICA ANTI-REPETICIÓN ---
     let chosenWord;
     if (activeQueue.length > 1) {
         do {
@@ -323,8 +343,7 @@ function loadQuestion() {
     }
     
     current = chosenWord;
-    lastWordKey = current.word; // Guardamos para la siguiente ronda
-    // ------------------------------
+    lastWordKey = current.word;
 
     if (gameMode === 'mixed') {
         currentRoundMode = Math.random() > 0.5 ? 'tr-es' : 'es-tr';
@@ -335,13 +354,11 @@ function loadQuestion() {
     const wordEl = document.getElementById("word");
     const optionsEl = document.getElementById("options");
 
-    // 1. LIMPIEZA
     wordEl.classList.remove("word-mastered");
-    wordEl.style.color = ""; // Limpieza extra por seguridad
+    wordEl.style.color = ""; 
 
     wordEl.textContent = (currentRoundMode === 'tr-es') ? current.word : current.correct;
     
-    // 2. ACTUALIZAR PUNTOS
     renderDots(current.word);
 
     if (currentRoundMode === 'tr-es') {
@@ -350,7 +367,6 @@ function loadQuestion() {
         }, 500);
     }
 
-    // 3. GENERAR OPCIONES (Asegúrate de que esta parte siga aquí abajo)
     let correctText = (currentRoundMode === 'tr-es') ? current.correct : current.word;
     let opts = new Set([correctText]);
     while(opts.size < 4) {
@@ -381,24 +397,32 @@ function handleAnswer(selected, correct) {
     if (isCorrect) {
         progress[wordKey] = (progress[wordKey] || 0) + 1;
         
-        // Si llega a 5, añadimos la clase que definimos en el CSS
         if (progress[wordKey] >= MASTERY_THRESHOLD) {
             score++;
+            wordEl.classList.add("word-mastered");
             activeQueue = activeQueue.filter(w => w.word !== wordKey);
-            wordEl.classList.add("word-mastered"); // <--- ESTO activa el amarillo
+
+            // RELLENADO CON 5% PROBABILIDAD DE NÚMERO
+            let nuevoElemento;
+            if (Math.random() < 0.05) { 
+                nuevoElemento = obtenerNumeroAleatorioTurco();
+            } else {
+                let posibles = allWords.filter(w => !activeQueue.some(aq => aq.word === w.word));
+                nuevoElemento = posibles[Math.floor(Math.random() * posibles.length)];
+            }
+            if (nuevoElemento) activeQueue.push(nuevoElemento);
         }
     } else {
         if (progress[wordKey] > 0) progress[wordKey]--;
     }
 
-    // Los botones se mantienen con sus colores normales (verde/rojo)
     document.querySelectorAll(".option").forEach(b => {
         if (b.textContent === correct) b.style.backgroundColor = "#10b981";
         if (b.textContent === selected && !isCorrect) b.style.backgroundColor = "#ef4444";
     });
 
     updateStats();
-    renderDots(wordKey); // Actualiza los círculos
+    renderDots(wordKey); 
     setTimeout(loadQuestion, 1250);
 }
 
@@ -414,7 +438,6 @@ function renderDots(wordKey) {
         d.className = "dot";
         
         if (i < val) {
-            // Si el progreso es 5, usamos la clase amarilla, si no, la verde (active)
             if (val >= MASTERY_THRESHOLD) {
                 d.classList.add("mastered");
             } else {
