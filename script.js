@@ -50,7 +50,7 @@ const allWords = [
     {word:"durmak",correct:"parar"},{word:"duş almak",correct:"ducharse"},{word:"duvar",correct:"pared"},
     {word:"düz saçlı",correct:"pelo liso"},{word:"düzenli",correct:"ordenado/a"},{word:"eczacı",correct:"farmacéutico/a"},
     {word:"eczane",correct:"farmacia"},{word:"eğlenceli",correct:"divertido/a"},{word:"Ekim",correct:"octubre"},
-    {word:"ekmek",correct:"pan"},{word:"ekonomi",correct:"economía"},{word:"eksi",correct:"menos"},{word:"derece",correct:"grado"},
+    {word:"ekmek",correct:"pan"},{word:"ekonomi",correct:"economía"},{word:"eksi",correct:"menos"},{word:"derece",correct:"grado (°C)"},
     {word:"elbise",correct:"vestido / ropa"},{word:"elma",correct:"manzana"},{word:"emekli",correct:"jubilado/a"},
     {word:"erkek",correct:"hombre"},{word:"erken",correct:"temprano"},{word:"eş",correct:"esposo/a, cónyuge"},
     {word:"eski",correct:"antiguo/a"},{word:"esmer",correct:"moreno/a"},{word:"etmek",correct:"hacer (auxiliar)"},
