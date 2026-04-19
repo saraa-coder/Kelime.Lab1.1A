@@ -311,6 +311,7 @@ function loadQuestion() {
     if (activeQueue.length === 0) initQueue();
     locked = false;
     current = activeQueue[Math.floor(Math.random() * activeQueue.length)];
+    
     if (gameMode === 'mixed') {
         currentRoundMode = Math.random() > 0.5 ? 'tr-es' : 'es-tr';
     } else {
@@ -319,15 +320,22 @@ function loadQuestion() {
 
     const wordEl = document.getElementById("word");
     const optionsEl = document.getElementById("options");
+
+    // 1. LIMPIEZA: Quitamos el amarillo antes de mostrar la nueva palabra
+    wordEl.classList.remove("word-mastered");
+
     wordEl.textContent = (currentRoundMode === 'tr-es') ? current.word : current.correct;
     
-    if (currentRoundMode === 'tr-es') {
-    setTimeout(() => {
-        hablarTurco(current.word);
-    }, 500); // Esto añade el medio segundo de espera
-}
-renderDots(current.word);
+    // 2. ACTUALIZAR PUNTOS: Dibujamos los círculos de la nueva palabra
+    renderDots(current.word);
 
+    if (currentRoundMode === 'tr-es') {
+        setTimeout(() => {
+            hablarTurco(current.word);
+        }, 500);
+    }
+
+    // 3. LÓGICA DE OPCIONES (Asegúrate de tener esto después)
     let correctText = (currentRoundMode === 'tr-es') ? current.correct : current.word;
     let opts = new Set([correctText]);
     while(opts.size < 4) {
