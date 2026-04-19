@@ -199,6 +199,7 @@ const allWords = [
     {word:"güneş gözlüğü",correct:"gafas de sol"},{word:"telefon şarjı",correct:"cargador del teléfono"},
     {word:"nikah",correct:"boda (ceremonia legal)"},{word:"karşılaşma",correct:"encuentro"},{word:"sene",correct:"año"},
     {word:"ünlü",correct:"vocal (Gram.) / famoso/a"},{word:"ünsüz",correct:"consonante (Gram.)"},
+    {word:"çaydanlık",correct:"tetera turca"},{word:"gemi",correct:"barco"},{word:"ışık",correct:"luz"},
     {word:"Yunanistan",correct:"Grecia"},{word:"demlik",correct:"tetera"},{word:"bisiklet",correct:"bicicleta"},
     {word:"sıralamak",correct:"ordenar, enumerar"},{word:"selamlaşma",correct:"saludo"},{word:"ayrılma",correct:"separación, despedida"},
     {word:"ne demek",correct:"de nada"},{word:"karşılaşma",correct:"encuentro"},{word:"bir şey değil",correct:"de nada"},{word:"rica etmek",correct:"pedir"},{word:"fincan",correct:"taza"},{word:"kupa",correct:"taza / trofeo"},{word:"alışveriş çantası",correct:"bolsa de la compra"},
