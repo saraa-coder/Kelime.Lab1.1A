@@ -302,28 +302,32 @@ function updateStats() {
 
 // --- LÓGICA ---
 function initQueue() {
+    // 1. Cogemos 23 palabras normales que no estén terminadas
     activeQueue = [...allWords]
         .filter(w => (progress[w.word] || 0) < MASTERY_THRESHOLD)
         .sort(() => Math.random() - 0.5)
-        .slice(0, 25);
+        .slice(0, 23);
 }
 
 function loadQuestion() {
     if (activeQueue.length === 0) initQueue();
     locked = false;
 
-    // --- LÓGICA ANTI-REPETICIÓN ---
+// --- LÓGICA ANTI-REPETICIÓN ---
     let chosenWord;
-    if (activeQueue.length > 1) {
+    // Si faltan palabras para llegar a 25, sacamos un número aleatorio nuevo
+    if (activeQueue.length < 25 && Math.random() < 0.05) {
+        chosenWord = getRandomNumber();
+    } else if (activeQueue.length > 1) {
         do {
             chosenWord = activeQueue[Math.floor(Math.random() * activeQueue.length)];
         } while (chosenWord.word === lastWordKey);
     } else {
-        chosenWord = activeQueue[0];
+        chosenWord = activeQueue[0] || getRandomNumber();
     }
     
     current = chosenWord;
-    lastWordKey = current.word; // Guardamos para la siguiente ronda
+    lastWordKey = current.word; 
     // ------------------------------
 
     if (gameMode === 'mixed') {
@@ -433,3 +437,11 @@ window.onload = () => {
     if (btnDefault) setMode('tr-es', { currentTarget: btnDefault });
 };
 window.speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices();
+
+function getRandomNumber() {
+    const unidades = ["sıfır", "bir", "iki", "üç", "dört", "beş", "altı", "yedi", "sekiz", "dokuz"];
+    const decenas = ["", "on", "yirmi", "otuz", "kırk", "elli", "altmış", "yetmiş", "seksen", "doksan"];
+    let n = Math.floor(Math.random() * 100);
+    let turco = n < 10 ? unidades[n] : decenas[Math.floor(n/10)] + (n%10 !== 0 ? " " + unidades[n%10] : "");
+    return { word: turco, correct: n.toString() };
+}
