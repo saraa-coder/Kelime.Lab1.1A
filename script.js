@@ -385,6 +385,8 @@ function handleAnswer(selected, correct) {
         if (progress[wordKey] >= MASTERY_THRESHOLD) {
             score++;
             activeQueue = activeQueue.filter(w => w.word !== wordKey);
+            let available = allWords.filter(w => (progress[w.word] || 0) < 5 && !activeQueue.some(aq => aq.word === w.word));
+if (available.length > 0) activeQueue.push(available[Math.floor(Math.random() * available.length)]);
             wordEl.classList.add("word-mastered"); // <--- ESTO activa el amarillo
         }
     } else {
