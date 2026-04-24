@@ -354,24 +354,34 @@ function loadQuestion() {
         }, 500);
     }
 
-    // 3. GENERAR OPCIONES (Asegúrate de que esta parte siga aquí abajo)
+ // 3. GENERAR OPCIONES
     let correctText = (currentRoundMode === 'tr-es') ? current.correct : current.word;
     let opts = new Set([correctText]);
+
     while(opts.size < 4) {
-        let r = allWords[Math.floor(Math.random() * allWords.length)];
-        let candidate = (currentRoundMode === 'tr-es') ? r.correct : r.word;
+        let candidate;
+        
+        // Comprobamos si la pregunta actual es un número
+        if (!isNaN(current.correct)) {
+            // Generamos un número aleatorio para la opción falsa
+            let n = Math.floor(Math.random() * 100);
+            
+            // IMPORTANTE: El formato de la opción falsa debe ser igual al de la correcta
+            if (currentRoundMode === 'tr-es') {
+                // Si la respuesta correcta es la cifra (ej: "63"), la falsa debe ser cifra
+                candidate = n.toString();
+            } else {
+                // Si la respuesta correcta es la palabra (ej: "altmış üç"), la falsa debe ser palabra
+                candidate = NumberToTurkish(n); 
+            }
+        } else {
+            // Si es una palabra normal
+            let r = allWords[Math.floor(Math.random() * allWords.length)];
+            candidate = (currentRoundMode === 'tr-es') ? r.correct : r.word;
+        }
+        
         opts.add(candidate);
     }
-
-    optionsEl.innerHTML = "";
-    [...opts].sort(() => Math.random() - 0.5).forEach(opt => {
-        let btn = document.createElement("button");
-        btn.className = "option";
-        btn.textContent = opt;
-        btn.onclick = () => handleAnswer(opt, correctText);
-        optionsEl.appendChild(btn);
-    });
-}
 
 function handleAnswer(selected, correct) {
     if (locked) return;
