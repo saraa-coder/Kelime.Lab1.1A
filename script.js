@@ -111,14 +111,14 @@ const allWords = [
     {word:"kuyumcu",correct:"joyero/a, joyería"},{word:"lale",correct:"tulipán"},{word:"lamba",correct:"lámpara"},
     {word:"limon",correct:"limón"},{word:"litre",correct:"litro"},{word:"lokanta",correct:"restaurante"},
     {word:"maç",correct:"partido"},{word:"mağaza",correct:"tienda"},{word:"mahalle",correct:"barrio"},
-    {word:"makas",correct:"tijeras"},{word:"manav",correct:"frutero/a, frutería"},{word:"market",correct:"supermercado"},
+    {word:"makas",correct:"tijeras"},{word:"manav",correct:"frutero/a, frutería"},{word:"market",correct:"mercado"},
     {word:"Mart",correct:"marzo"},{word:"masa",correct:"mesa"},{word:"mavi",correct:"azul"},
     {word:"Mayıs",correct:"mayo"},{word:"memur",correct:"funcionario/a"},{word:"merdiven",correct:"escalera"},
     {word:"Merhaba",correct:"Hola"},{word:"meşgul",correct:"ocupado/a"},{word:"metro",correct:"metro"},
     {word:"mevsimler",correct:"estaciones del año"},{word:"millet",correct:"nación"},{word:"misal",correct:"ejemplo"},
     {word:"mor",correct:"morado"},{word:"müzik çalar",correct:"reproductor de música"},{word:"mühendis",correct:"ingeniero/a"},
     {word:"müsait",correct:"disponible"},{word:"mutfak",correct:"cocina"},{word:"mutlu",correct:"feliz"},
-    {word:"mutsuz",correct:"infeliz / triste"},{word:"nar",correct:"granada (fruta)"},{word:"nefes",correct:"respiración"},
+    {word:"mutsuz",correct:"infeliz / triste"},{word:"nar",correct:"granada"},{word:"nefes",correct:"respiración"},
     {word:"nefret etmek",correct:"odiar"},{word:"nerede",correct:"dónde"},{word:"nesne",correct:"objeto"},
     {word:"niçin",correct:"por qué"},{word:"Nijerya",correct:"Nigeria"},{word:"Nisan",correct:"abril"},
     {word:"normal",correct:"normal"},{word:"numara",correct:"número"},{word:"ocak",correct:"enero / fogón"},
@@ -199,7 +199,7 @@ const allWords = [
     {word:"güneş gözlüğü",correct:"gafas de sol"},{word:"telefon şarjı",correct:"cargador del teléfono"},
     {word:"nikah",correct:"boda (ceremonia legal)"},{word:"karşılaşma",correct:"encuentro"},{word:"sene",correct:"año"},
     {word:"şamdan",correct:"candelabro"},{word:"takvim",correct:"calendario"},{word:"üzüm",correct:"uva"},{word:"valiz",correct:"maleta"},
-    {word:"ünlü",correct:"vocal (Gram.) / famoso/a"},{word:"ünsüz",correct:"consonante (Gram.)"},
+    {word:"ünlü",correct:"vocal / famoso/a"},{word:"ünsüz",correct:"consonante"},
     {word:"keman",correct:"violín"},{word:"nargile",correct:"cachimba"},{word:"peynir",correct:"queso"},
     {word:"çaydanlık",correct:"tetera turca"},{word:"gemi",correct:"barco"},{word:"ışık",correct:"luz"},
     {word:"Yunanistan",correct:"Grecia"},{word:"demlik",correct:"tetera"},{word:"bisiklet",correct:"bicicleta"},
@@ -316,7 +316,7 @@ function loadQuestion() {
 // --- LÓGICA ANTI-REPETICIÓN ---
     let chosenWord;
     // Si faltan palabras para llegar a 25, sacamos un número aleatorio nuevo
-    if (activeQueue.length < 25 && Math.random() < 0.18) {
+    if (activeQueue.length < 25 && Math.random() < 0.07) {
         chosenWord = getRandomNumber();
     } else if (activeQueue.length > 1) {
         do {
@@ -354,34 +354,44 @@ function loadQuestion() {
         }, 500);
     }
 
- // 3. GENERAR OPCIONES
+// 3. GENERAR OPCIONES
     let correctText = (currentRoundMode === 'tr-es') ? current.correct : current.word;
     let opts = new Set([correctText]);
 
     while(opts.size < 4) {
         let candidate;
         
-        // Comprobamos si la pregunta actual es un número
-        if (!isNaN(current.correct)) {
-            // Generamos un número aleatorio para la opción falsa
+        // ¿Estamos trabajando con la lógica de números?
+        if (current.word && !isNaN(current.correct)) {
             let n = Math.floor(Math.random() * 100);
             
-            // IMPORTANTE: El formato de la opción falsa debe ser igual al de la correcta
             if (currentRoundMode === 'tr-es') {
-                // Si la respuesta correcta es la cifra (ej: "63"), la falsa debe ser cifra
+                // Arriba sale Texto Turco -> Abajo CORRECTA es Cifra -> FALSAS deben ser Cifras
                 candidate = n.toString();
             } else {
-                // Si la respuesta correcta es la palabra (ej: "altmış üç"), la falsa debe ser palabra
-                candidate = NumberToTurkish(n); 
+                // Arriba sale Cifra -> Abajo CORRECTA es Texto Turco -> FALSAS deben ser Texto Turco
+                const unidades = ["sıfır", "bir", "iki", "üç", "dört", "beş", "altı", "yedi", "sekiz", "dokuz"];
+                const decenas = ["", "on", "yirmi", "otuz", "kırk", "elli", "altmış", "yetmiş", "seksen", "doksan"];
+                candidate = n < 10 ? unidades[n] : decenas[Math.floor(n/10)] + (n%10 !== 0 ? " " + unidades[n%10] : "");
             }
         } else {
-            // Si es una palabra normal
+            // Lógica de palabras normales
             let r = allWords[Math.floor(Math.random() * allWords.length)];
             candidate = (currentRoundMode === 'tr-es') ? r.correct : r.word;
         }
         
-        opts.add(candidate);
+        if (candidate !== correctText) opts.add(candidate);
     }
+
+    optionsEl.innerHTML = "";
+    [...opts].sort(() => Math.random() - 0.5).forEach(opt => {
+        let btn = document.createElement("button");
+        btn.className = "option";
+        btn.textContent = opt;
+        btn.onclick = () => handleAnswer(opt, correctText);
+        optionsEl.appendChild(btn);
+    });
+}
 
 function handleAnswer(selected, correct) {
     if (locked) return;
@@ -415,7 +425,7 @@ if (available.length > 0) activeQueue.push(available[Math.floor(Math.random() * 
 
     updateStats();
     renderDots(wordKey); // Actualiza los círculos
-    setTimeout(loadQuestion, 1500);
+    setTimeout(loadQuestion, 1250);
 }
 
 function renderDots(wordKey) {
