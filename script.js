@@ -316,7 +316,7 @@ function loadQuestion() {
 // --- LÓGICA ANTI-REPETICIÓN ---
     let chosenWord;
     // Si faltan palabras para llegar a 25, sacamos un número aleatorio nuevo
-    if (activeQueue.length < 25 && Math.random() < 0.2) {
+    if (activeQueue.length < 25 && Math.random() < 0.1) {
         chosenWord = getRandomNumber();
     } else if (activeQueue.length > 1) {
         do {
