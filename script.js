@@ -405,7 +405,7 @@ if (available.length > 0) activeQueue.push(available[Math.floor(Math.random() * 
 
     updateStats();
     renderDots(wordKey); // Actualiza los círculos
-    setTimeout(loadQuestion, 1250);
+    setTimeout(loadQuestion, 1500);
 }
 
 function renderDots(wordKey) {
