@@ -111,7 +111,7 @@ const allWords = [
     {word:"kuyumcu",correct:"joyero/a, joyería"},{word:"lale",correct:"tulipán"},{word:"lamba",correct:"lámpara"},
     {word:"limon",correct:"limón"},{word:"litre",correct:"litro"},{word:"lokanta",correct:"restaurante"},
     {word:"maç",correct:"partido"},{word:"mağaza",correct:"tienda"},{word:"mahalle",correct:"barrio"},
-    {word:"makas",correct:"tijeras"},{word:"manav",correct:"frutero/a, frutería"},{word:"market",correct:"mercado"},
+    {word:"makas",correct:"tijeras"},{word:"manav",correct:"frutero/a, frutería"},{word:"market",correct:"supermercado"},
     {word:"Mart",correct:"marzo"},{word:"masa",correct:"mesa"},{word:"mavi",correct:"azul"},
     {word:"Mayıs",correct:"mayo"},{word:"memur",correct:"funcionario/a"},{word:"merdiven",correct:"escalera"},
     {word:"Merhaba",correct:"Hola"},{word:"meşgul",correct:"ocupado/a"},{word:"metro",correct:"metro"},
